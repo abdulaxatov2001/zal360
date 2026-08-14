@@ -1,0 +1,37 @@
+Platon API Bo'yicha O'rganilgan Ma'lumotlar
+
+1. API Yaratish Parametrlari:
+- path: API manzili (masalan, v1/yatt/bank).
+- method: So'rov turi (GET, POST, PUT, PATCH, DELETE).
+- auth_handler: Avtorizatsiya usuli (Bearer Token, Basic Auth).
+- state: API holati (active - faol, hidden - yashirin, archived - arxivlangan).
+- access_condition: API-ga kirish ruxsatini belgilash sharti.
+- note: API haqida qisqacha izoh.
+- has_transaction: Xatolik yuz berganda ma'lumotlarni oldingi holatiga qaytarish (rollback) funksiyasi.
+- result_cached_seconds: Natijani keshlash vaqti (soniyalarda).
+- group_by: API-larni guruhlash uchun guruh nomi.
+
+2. Stage'lar (Handlerlar) Turlari:
+Bitta API ichida bir nechta jarayonlarni ketma-ket bajarish mumkin. Asosiy handlerlar:
+- SQL Select: Bazadan ma'lumotlarni o'qib olish.
+- SQL Insert: Bazaga bitta obyektni yozish.
+- SQL Update: Bazadagi ma'lumotni yangilash.
+- SQL Bulk Insert: List (array) ko'rinishidagi ma'lumotlarni bazaga birgalikda yozish.
+- SQL Batch Update: List (array) ko'rinishidagi ma'lumotlarni birgalikda yangilash.
+- HTTP Request Handler: Tashqi API-larga murojaat qilish.
+- Static JSON: Ikki va undan ortiq stage ma'lumotlarini birlashtirish yoki statik ma'lumot qaytarish.
+- JS Eval: JavaScript va Java orqali mantiq yozish.
+- Validation: Validatsiya o'rnatish va shart bajarilmasa, 500 xatolik qaytarish.
+- Stage Data Converter: Ma'lumotlar turini o'zgartirish.
+- Handler group: Stage'larni guruhlash.
+- Joined Child Object: API ichida obyekt qurish.
+
+3. O'zgaruvchilarni ushlash va Query sintaksisi:
+- '#' belgisi: API-ga so'rov orqali kelgan parametrlarni ushlash (masalan: #car_name::varchar).
+- ':' belgisi: Boshqa (yuqoridagi) stage-dan kelgan ma'lumotlarni ushlash.
+- '@' belgisi: Bulk Insert yoki Batch Update qilinayotganda, array ichidagi har bir elementning maydonini ushlash (masalan: @car_name::varchar).
+
+4. Qo'shimcha ma'lumotlar:
+- Platon tizimida REST API arxitekturasi ishlatiladi.
+- Ma'lumotlar bazasi so'rovlari asosan PostgreSQL (psql) sintaksisida yoziladi (masalan: cast qilish uchun ::integer, ::varchar ishlatiladi).
+- Bulk Insert misoli: batch_data_source qismiga "#cars" deb yoziladi va sql qismida "@car_name" orqali array ichidagi obyekt xususiyatlariga murojaat qilinadi.
