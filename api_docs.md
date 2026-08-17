@@ -438,3 +438,73 @@ Agar bu raqam bilan avval ro'yxatdan o'tilgan bo'lsa, `data.status` qiymati `fal
     "statusText": "OK"
 }
 ```
+
+---
+
+## 7. Parolni yangilash / qayta tiklash (Update Password)
+
+Foydalanuvchi parolini esdan chiqarganda yoki yangilamoqchi bo'lganda ishlatiladi. Odatda bu API'ga murojaat qilishdan oldin `sent_code/sms` va `check_code/sms` API'lari orqali foydalanuvchining raqami tasdiqlangan bo'lishi kerak.
+
+- **URL:** `/mobile/v1/update_password`
+- **Method:** `PUT`
+- **Content-Type:** `application/json`
+
+### So'rov (Request Body)
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `phone_number` | `string` | Ha | Foydalanuvchining telefon raqami. Masalan: `998943234311` |
+| `password` | `string` | Ha | Yangi parol. Masalan: `2` |
+
+**Request namunasi (cURL):**
+```bash
+curl --location --request PUT 'https://zal360.uz/endpoint/api/mobile/v1/update_password' \
+--header 'Content-Type: application/json' \
+--data '{
+    "phone_number": "998943234311",
+    "password":"2"
+}'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### Muvaffaqiyatli javob (200 OK)
+Parol muvaffaqiyatli o'zgartirilganda quyidagi javob qaytadi.
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-17T09:25:05.523+00:00",
+    "code": null,
+    "path": null,
+    "data": {
+        "exist": true,
+        "valid": {},
+        "response": {},
+        "update": {}
+    },
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
+
+#### Xatolik javobi (400 Bad Request)
+Agar kiritilgan telefon raqam tizimda ro'yxatdan o'tmagan bo'lsa, xatolik qaytariladi. Dasturchi foydalanuvchiga "Bu raqam avval ro'yxatdan o'tmagan" mazmunida xabar berishi kerak.
+
+```json
+{
+    "error": "400 BAD_REQUEST \"99894323431 bu raqam avval tizimdan ro'yxatdan o'tmagan\"",
+    "message": "99894323431 bu raqam avval tizimdan ro'yxatdan o'tmagan",
+    "timestamp": "2026-08-17T09:26:00.608+00:00",
+    "code": null,
+    "path": "/mobile/v1/update_password",
+    "data": null,
+    "response": null,
+    "status": 400,
+    "statusText": "Bad Request"
+}
+```
