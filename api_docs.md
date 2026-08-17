@@ -137,3 +137,76 @@ Agar kiritilgan kod noto'g'ri bo'lsa, `data.result` qiymati `false` qaytadi. Das
     "statusText": "OK"
 }
 ```
+
+---
+
+## 3. Tashkilot filiallarini olish (Get Branches by Org ID)
+
+Foydalanuvchi (tashkilot) ga tegishli bo'lgan barcha filiallar ro'yxatini olish uchun ishlatiladi. Bu API avtorizatsiya (token) talab qiladi.
+
+- **URL:** `/mobile/v1/get/branch_by_org_id`
+- **Method:** `GET`
+- **Headers:** `Authorization: Bearer <token>`
+
+### So'rov (Request)
+Bu so'rov `GET` bo'lganligi uchun `body` qismi yo'q. Avtorizatsiya tokenini jo'natish kifoya.
+
+**Request namunasi (cURL):**
+```bash
+curl --location 'https://zal360.uz/endpoint/api/mobile/v1/get/branch_by_org_id' \
+--header 'Authorization: Bearer eyJra...'
+```
+
+---
+
+### Javoblar (Responses)
+
+Barcha javoblar `status: 200 OK` bilan qaytadi. Ma'lumotlar `data` massivi ichida keladi.
+
+#### Muvaffaqiyatli javob (Filiallar mavjud bo'lsa)
+Agar tashkilotning filiallari bo'lsa, ro'yxat ob'ektlar ko'rinishida qaytadi.
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-17T07:47:13.977+00:00",
+    "code": null,
+    "path": null,
+    "data": [
+        {
+            "id": "7a5c35dd-98cc-41cf-a34f-db17cfa6190f",
+            "name": "1 flial",
+            "address": "qaysidir uyda",
+            "coordinates": "41.339559, 69.293758",
+            "direction": null,
+            "region": "Андижон",
+            "district": "Избоскан т.",
+            "btime": "07:00:00",
+            "etime": "23:00:00",
+            "type": "Эркак",
+            "directions": "Бокс"
+        }
+    ],
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
+
+#### Bo'sh javob (Filiallar mavjud bo'lmasa)
+Agar filiallar topilmasa, `data` bo'sh massiv (`[]`) shaklida qaytadi.
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-17T07:47:13.977+00:00",
+    "code": null,
+    "path": null,
+    "data": [],
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
