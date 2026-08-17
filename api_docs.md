@@ -365,3 +365,76 @@ Agar login yoki parol xato kiritilsa (yoki masalan body umuman berilmasa), avtor
     "statusText": "Bad Request"
 }
 ```
+
+---
+
+## 6. Ro'yxatdan o'tish (Register)
+
+Yangi foydalanuvchini tizimdan ro'yxatdan o'tkazish uchun ishlatiladi.
+
+- **URL:** `/mobile/v1/register`
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+
+### So'rov (Request Body)
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `phone` | `string` | Ha | Foydalanuvchining telefon raqami. Masalan: `998943234311` |
+| `password` | `string` | Ha | Foydalanuvchi paroli. Masalan: `121` |
+
+**Request namunasi (cURL):**
+```bash
+curl --location 'https://zal360.uz/endpoint/api/mobile/v1/register' \
+--header 'Content-Type: application/json' \
+--data '{
+  "phone": "998943234311",
+  "password": "121"
+}'
+```
+
+---
+
+### Javoblar (Responses)
+
+Ikkala holatda ham API `200 OK` status qaytaradi. Natijani `data.status` maydoniga qarab ajratish kerak.
+
+#### Muvaffaqiyatli javob (Ro'yxatdan o'tdi)
+Foydalanuvchi muvaffaqiyatli saqlanganda `data.status` qiymati `true` qaytadi.
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-17T08:55:06.968+00:00",
+    "code": null,
+    "path": null,
+    "data": {
+        "message": "Saqlandi",
+        "status": true
+    },
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
+
+#### Xatolik javobi (Avval ro'yxatdan o'tgan)
+Agar bu raqam bilan avval ro'yxatdan o'tilgan bo'lsa, `data.status` qiymati `false` qaytadi. Dasturchi foydalanuvchiga "bu raqam bilan avval tizimdan ro'yxatdan o'tilgan" degan xabarni ko'rsatishi kerak.
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-17T08:54:40.170+00:00",
+    "code": null,
+    "path": null,
+    "data": {
+        "message": "bu raqam bilan avval tizimdan ro`yhatdan o`tilgan",
+        "status": false
+    },
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
