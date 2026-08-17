@@ -285,3 +285,83 @@ Agar kiritilgan foydalanuvchi tizimda avval ro'yxatdan o'tgan bo'lsa (masalan, P
     "statusText": "Bad Request"
 }
 ```
+
+---
+
+## 5. Tizimga kirish (Login)
+
+Foydalanuvchini avtorizatsiya qilish va unga yangi `access_token` va `refresh_token` berish uchun ishlatiladi.
+
+- **URL:** `/mobile/v1/login`
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+
+### So'rov (Request Body)
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `username` | `string` | Ha | Foydalanuvchining logini (yoki telefon raqami). Masalan: `52410015910048` |
+| `password` | `string` | Ha | Parol. Masalan: `1` |
+
+**Request namunasi (cURL):**
+```bash
+curl --location 'https://zal360.uz/endpoint/api/mobile/v1/login' \
+--header 'Content-Type: application/json' \
+--data '{
+  "username": "52410015910048",
+  "password": "1"
+}'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### Muvaffaqiyatli javob (200 OK)
+Loging va parol to'g'ri bo'lsa, tizim yangi tokenlarni qaytaradi. Barcha kerakli tokenlar `data.data` ob'ekti ichida joylashgan bo'ladi.
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-17T06:38:18.207+00:00",
+    "code": null,
+    "path": null,
+    "data": {
+        "status": 200,
+        "timestamp": 1786948698206,
+        "data": {
+            "access_token": "eyJraWQiOi...",
+            "refresh_token": "eyJra...",
+            "token_type": "Bearer",
+            "expires_in": 1787036698175,
+            "refresh_expires_in": 1787213698194
+        },
+        "statusText": "OK"
+    },
+    "response": {
+        "headers": {
+            "Content-Type": ["application/json"]
+        }
+    },
+    "status": 200,
+    "statusText": "OK"
+}
+```
+
+#### Xatolik javobi (400 Bad Request / 401 Unauthorized)
+Agar login yoki parol xato kiritilsa (yoki masalan body umuman berilmasa), avtorizatsiya serveri xatolik qaytaradi.
+
+```json
+{
+    "error": "400 BAD_REQUEST \"Remote endpoint [http://10.1.1.22:8084/auth/api/v1/login] returned error on stage _body: 401  on POST request for \\\"http://10.1.1.22:8084/auth/api/v1/login\\\": [no body]\"",
+    "message": "Remote endpoint [http://10.1.1.22:8084/auth/api/v1/login] returned error on stage _body: 401  on POST request for \"http://10.1.1.22:8084/auth/api/v1/login\": [no body]",
+    "timestamp": "2026-08-17T08:51:22.267+00:00",
+    "code": null,
+    "path": "/mobile/v1/login",
+    "data": "RequestBody Base64: e3Bhc3N3b3JkPVsyXSwgdXNlcm5hbWU9WzUyNDEwMDE1OTEwMDQ4XX0=",
+    "response": null,
+    "status": 400,
+    "statusText": "Bad Request"
+}
+```
