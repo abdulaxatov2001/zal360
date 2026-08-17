@@ -210,3 +210,61 @@ Agar filiallar topilmasa, `data` bo'sh massiv (`[]`) shaklida qaytadi.
     "statusText": "OK"
 }
 ```
+
+---
+
+## 4. Mijoz qo'shish (Add Client)
+
+Yangi mijozni (client) ro'yxatdan o'tkazish uchun ishlatiladi. API avtorizatsiya talab qiladi.
+
+- **URL:** `/v1/post/clients`
+- **Method:** `POST`
+- **Headers:** 
+  - `Authorization: Bearer <token>`
+  - `Content-Type: application/json`
+
+### So'rov (Request Body)
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `full_name` | `string` | Ha | Mijozning to'liq ismi sharifi. Masalan: `nimadir` |
+| `gender` | `string` | Ha | Jinsi (`male` yoki `female`) |
+| `pinfl` | `string` | Ha | JSHSHIR (PINFL). Masalan: `1234354543534` |
+| `photo` | `string` | Ha | Mijoz rasmiga havola yoki base64. Masalan: `pdsd1221231dssfd` |
+
+**Request namunasi (cURL):**
+```bash
+curl --location 'https://zal360.uz/endpoint/api/v1/post/clients' \
+--header 'Authorization: Bearer eyJra...' \
+--header 'Content-Type: application/json' \
+--data '{
+     "full_name":"nimadir",
+     "gender":"male/female",
+     "pinfl":"1234354543534",
+     "photo":"pdsd1221231dssfd"
+}'
+```
+
+---
+
+### Javoblar (Responses)
+
+Muvaffaqiyatli saqlanganda API `200 OK` statusi bilan quyidagi javobni qaytaradi. 
+
+#### Muvaffaqiyatli javob
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-17T08:35:00.183+00:00",
+    "code": null,
+    "path": null,
+    "data": {
+        "response": {},
+        "insert": {}
+    },
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
