@@ -251,7 +251,7 @@ curl --location 'https://zal360.uz/endpoint/api/v1/post/clients' \
 
 Muvaffaqiyatli saqlanganda API `200 OK` statusi bilan quyidagi javobni qaytaradi. 
 
-#### Muvaffaqiyatli javob
+#### Muvaffaqiyatli javob (200 OK)
 ```json
 {
     "error": null,
@@ -266,5 +266,22 @@ Muvaffaqiyatli saqlanganda API `200 OK` statusi bilan quyidagi javobni qaytaradi
     "response": {},
     "status": 200,
     "statusText": "OK"
+}
+```
+
+#### Xatolik javobi (400 Bad Request)
+Agar kiritilgan foydalanuvchi tizimda avval ro'yxatdan o'tgan bo'lsa (masalan, PINFL orqali), quyidagi xatolik qaytadi:
+
+```json
+{
+    "error": "400 BAD_REQUEST \"bu foydalanuvchi avval ro'yhatdan o'tgan\"",
+    "message": "bu foydalanuvchi avval ro'yhatdan o'tgan",
+    "timestamp": "2026-08-17T08:44:59.863+00:00",
+    "code": null,
+    "path": "/v1/post/clients",
+    "data": null,
+    "response": null,
+    "status": 400,
+    "statusText": "Bad Request"
 }
 ```
