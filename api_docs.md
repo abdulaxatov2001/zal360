@@ -708,3 +708,162 @@ Agar kiritilgan foydalanuvchi ma'lumotlari (masalan, PINFL) orqali tizimda avval
     "statusText": "Bad Request"
 }
 ```
+
+---
+
+## 10. Barcha sport zallari filiallarini olish (Get All Branches)
+
+Mobil ilovada barcha mavjud sport zallari va ularning filiallari ro'yxatini (nomi, tashkilot nomi, manzili, koordinatalari, ish vaqti, turi, yo'nalishlari va boshqalar) olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
+
+- **URL:** `/mobile/v1/get/branches`
+- **Method:** `GET`
+- **Headers:** 
+  - `Authorization: Bearer <token>`
+
+### So'rov (Request)
+`GET` so'rovi bo'lgani sababli `body` yo'q, faqat `Authorization` header talab qilinadi.
+
+**Request namunasi (cURL):**
+```bash
+curl --location 'https://zal360.uz/endpoint/api/mobile/v1/get/branches' \
+--header 'Authorization: Bearer eyJra...'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### 1. Muvaffaqiyatli javob (200 OK)
+Filiallar ro'yxati mavjud bo'lganda quyidagi formatda to'liq ma'lumotlar massivi qaytadi:
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-18T07:22:17.927+00:00",
+    "code": null,
+    "path": null,
+    "data": [
+        {
+            "branch_id": "1c917e03-9883-4c7f-bd84-32daccd8f2e6",
+            "branch_name": "Яшнобод фитнесс",
+            "org_name": "Кодиров Ш М",
+            "org_id": "20a4d3ad-b0ea-49bd-9658-c9507f6020fb",
+            "address": "",
+            "address_additionally": "",
+            "coordinates": "41.269620, 69.309654",
+            "region": "Тошкент ш.",
+            "district": "Яшнобод т.",
+            "btime": "07:00:00",
+            "etime": "23:00:00",
+            "type": "Умумий",
+            "capacity": null,
+            "directions": "Фитнес",
+            "location": null
+        },
+        {
+            "branch_id": "35bada9e-a41e-4402-b2d9-2c0f72efe6b5",
+            "branch_name": "Фитнес залл",
+            "org_name": "Кодиров Ш М",
+            "org_id": "20a4d3ad-b0ea-49bd-9658-c9507f6020fb",
+            "address": "",
+            "address_additionally": "",
+            "coordinates": "41.357906, 69.290943",
+            "region": "Тошкент ш.",
+            "district": "Юнусобод т.",
+            "btime": "07:00:00",
+            "etime": "23:00:00",
+            "type": "Эркак",
+            "capacity": null,
+            "directions": "Фитнес",
+            "location": null
+        },
+        {
+            "branch_id": "7a5c35dd-98cc-41cf-a34f-db17cfa6190f",
+            "branch_name": "bektemir Bulls",
+            "org_name": "Azizbek's GYM",
+            "org_id": "9148a242-7de9-4ac2-9d2f-9427aed3742c",
+            "address": "qaysidir uyda",
+            "address_additionally": "",
+            "coordinates": "41.246603, 69.379925",
+            "region": "Тошкент ш.",
+            "district": "Бектемир т.",
+            "btime": "07:00:00",
+            "etime": "23:00:00",
+            "type": "Эркак",
+            "capacity": 100,
+            "directions": "Футбол,Бокс",
+            "location": null
+        },
+        {
+            "branch_id": "88b61662-028d-42d2-8212-d1303622d261",
+            "branch_name": "uchtepa Bulls",
+            "org_name": "Azizbek's GYM",
+            "org_id": "9148a242-7de9-4ac2-9d2f-9427aed3742c",
+            "address": "qaysidir uyda",
+            "address_additionally": "",
+            "coordinates": "41.303137, 69.175561",
+            "region": "Тошкент ш.",
+            "district": "Учтепа т.",
+            "btime": "07:00:00",
+            "etime": "23:00:00",
+            "type": "Эркак",
+            "capacity": 100,
+            "directions": "Футбол,Тенис",
+            "location": null
+        },
+        {
+            "branch_id": "9aa2a159-4871-422e-9acd-ec695dd98aac",
+            "branch_name": "Чилонзор фитнесс",
+            "org_name": "Кодиров Ш М",
+            "org_id": "20a4d3ad-b0ea-49bd-9658-c9507f6020fb",
+            "address": "",
+            "address_additionally": "",
+            "coordinates": "41.281618, 69.198761",
+            "region": "Тошкент ш.",
+            "district": "Чилонзор т.",
+            "btime": "07:00:00",
+            "etime": "23:00:00",
+            "type": "Эркак",
+            "capacity": null,
+            "directions": "Фитнес",
+            "location": null
+        },
+        {
+            "branch_id": "c6cfd8b2-4f7c-4eab-ae1e-b476ae59ef8c",
+            "branch_name": "bodomzor Bulls",
+            "org_name": "Azizbek's GYM",
+            "org_id": "9148a242-7de9-4ac2-9d2f-9427aed3742c",
+            "address": "qaysidir uyda",
+            "address_additionally": "",
+            "coordinates": "41.339559, 69.293758",
+            "region": "Тошкент ш.",
+            "district": "Юнусобод т.",
+            "btime": "07:00:00",
+            "etime": "23:00:00",
+            "type": "Эркак",
+            "capacity": 100,
+            "directions": "Футбол,Фитнес",
+            "location": null
+        }
+    ],
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
+
+#### 2. Bo'sh javob (Filiallar mavjud bo'lmasa - 200 OK)
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-18T07:22:17.927+00:00",
+    "code": null,
+    "path": null,
+    "data": [],
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
