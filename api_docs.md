@@ -268,7 +268,72 @@ Login va parol to'g'ri bo'lsa, tizim yangi tokenlarni `data.data` ob'ektida qayt
 
 ---
 
-## 4. Parolni qayta tiklash (Forgot Password - SMS kod yuborish)
+## 4. Tokenni yangilash (Refresh Token)
+
+`access_token` muddati tugaganda, foydalanuvchini tizimdan chiqarmasdan yangi `access_token` va yangilangan `refresh_token` olish uchun ishlatiladi.
+
+- **URL:** `https://zal360.uz/auth/api/v1/refresh/token`
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+- **Headers:** `X-Device-Token` *(ixtiyoriy)*
+
+### So'rov (Request Body)
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `refresh_token` | `string` | Ha | Login vaqtida berilgan mavjud refresh token |
+
+**Request namunasi (cURL):**
+```bash
+curl --location 'https://zal360.uz/auth/api/v1/refresh/token' \
+--header 'Content-Type: application/json' \
+--data '{
+    "refresh_token": "eyJraWQiOiIxMmQyNzRiNC00MTZlLTQ5YWYtYWFjNS04MTA0MzQ1MjVmNzEiLCJhbGciOiJSUzI1NiJ9..."
+}'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### 1. Muvaffaqiyatli javob (200 OK)
+Tokenlar muvaffaqiyatli yangilanganda yangi `access_token` va `refresh_token` qaytariladi.
+
+```json
+{
+    "status": 200,
+    "timestamp": 1787025141358,
+    "data": {
+        "access_token": "eyJraWQiOiIxMmQyNzRiNC00MTZlLTQ5YWYtYWFjNS04MTA0MzQ1MjVmNzEiLCJhbGciOiJSUzI1NiJ9...",
+        "refresh_token": "eyJraWQiOiIxMmQyNzRiNC00MTZlLTQ5YWYtYWFjNS04MTA0MzQ1MjVmNzEiLCJhbGciOiJSUzI1NiJ9...",
+        "token_type": "Bearer",
+        "expires_in": 1787113141335,
+        "refresh_expires_in": 1787213698000
+    },
+    "statusText": "OK"
+}
+```
+
+#### 2. Xatolik: Yaroqsiz yoki muddati o'tgan token (401 Unauthorized)
+Agar `refresh_token` noto'g'ri yoki muddati eskirgan bo'lsa, mobil ilova foydalanuvchini login sahifasiga yo'naltirishi (`logout`) kerak:
+
+```json
+{
+    "error": "401 UNAUTHORIZED",
+    "message": "Яроқсиз токен",
+    "timestamp": "2026-08-18T03:56:09.111+00:00",
+    "code": "app.client.code.for.logout",
+    "path": "/v1/refresh/token",
+    "data": null,
+    "response": null,
+    "statusText": "Unauthorized",
+    "status": 401
+}
+```
+
+---
+
+## 5. Parolni qayta tiklash (Forgot Password - SMS kod yuborish)
 
 Foydalanuvchi parolini unutganda, telefon raqami va yangi parolini kiritadi. Agar raqam tizimda mavjud bo'lsa, tasdiqlash uchun SMS kod yuboriladi.
 
@@ -365,7 +430,7 @@ SMS kod yuborilganda `session_id` qaytadi.
 
 ---
 
-## 5. Parol yangilashni tasdiqlash (Forgot Check Code & Auto Login)
+## 6. Parol yangilashni tasdiqlash (Forgot Check Code & Auto Login)
 
 SMS orqali yuborilgan tasdiqlash kodini tekshiradi. Kod to'g'ri bo'lsa, foydalanuvchining yangi paroli bazada yangilanadi va darhol avtomatik login qilinib, yangi tokenlar qaytariladi.
 
@@ -457,7 +522,7 @@ Parol yangilanadi va `data.login.data` ichida avtomatik kirish tokenlari qaytari
 
 ---
 
-## 6. Tashkilot filiallarini olish (Get Branches by Org ID)
+## 7. Tashkilot filiallarini olish (Get Branches by Org ID)
 
 Foydalanuvchi (tashkilot) ga tegishli bo'lgan barcha filiallar ro'yxatini olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
 
@@ -524,7 +589,7 @@ curl --location 'https://zal360.uz/endpoint/api/mobile/v1/get/branch_by_org_id' 
 
 ---
 
-## 7. Mijoz qo'shish (Add Client)
+## 8. Mijoz qo'shish (Add Client)
 
 Yangi mijozni (client) ro'yxatdan o'tkazish uchun ishlatiladi. API avtorizatsiya talab qiladi.
 
