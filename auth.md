@@ -651,6 +651,8 @@ Foydalanuvchi tizimga kirgandan so'ng, o'zining shaxsiy ma'lumotlarini (F.I.O, j
 | `full_name` | `string` | Ha | Mijozning to'liq ismi sharifi. Masalan: `Ali Valiyev` |
 | `gender` | `string` | Ha | Jinsi (`male` yoki `female`) |
 | `pinfl` | `number` / `integer` | Ha | 14 xonali JSHSHIR (PINFL). Masalan: `12345678901234` |
+| `age` | `number` / `integer` | Ha | Mijozning yoshi. Masalan: `25` |
+| `weight` | `number` / `numeric` | Ha | Mijozning vazni (kg da). Masalan: `75.5` |
 | `photo` | `string` | Ha | Fayl yuklash API'dan qaytgan fayl `id` si. Masalan: `8a818196143b5539a5ca264e` |
 
 **Request namunasi (cURL):**
@@ -662,6 +664,8 @@ curl --location 'https://zal360.uz/endpoint/api/v1/post/client' \
   "full_name": "Ali Valiyev",
   "gender": "male",
   "pinfl": 12345678901234,
+  "age": 25,
+  "weight": 75.5,
   "photo": "8a818196143b5539a5ca264e"
 }'
 ```
@@ -753,6 +757,8 @@ Mijoz ma'lumotlari topilganda:
     "data": {
         "name": "kimdir",
         "pinfl": 12345678901234,
+        "age": 25,
+        "weight": 75.5,
         "mobile_phone": "9982342323",
         "gender": "male",
         "created_at": "2026-08-18T09:49:55.458+00:00",
