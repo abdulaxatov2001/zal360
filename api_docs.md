@@ -589,9 +589,54 @@ curl --location 'https://zal360.uz/endpoint/api/mobile/v1/get/branch_by_org_id' 
 
 ---
 
-## 8. Mijoz ma'lumotlarini kiritish / qo'shish (Add Client)
+## 8. Fayl / Rasm yuklash (Upload File / Photo)
 
-Foydalanuvchi tizimga kirgandan so'ng, o'zining shaxsiy ma'lumotlarini (F.I.O, jinsi, PINFL, rasm) to'ldirib ro'yxatdan o'tkazish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
+Mijozning fotosurati yoki boshqa hujjatlarini serverga yuklash uchun ishlatiladi. API yuklangan faylning unikal `id` sini qaytaradi va bu `id` mijoz qo'shish API'sida `photo` maydoniga uzatiladi.
+
+- **URL:** `https://zal360.uz/file/api/v1/upload/form`
+- **Method:** `POST`
+- **Headers:** 
+  - `Authorization: Bearer <token>`
+  - `Content-Type: multipart/form-data`
+
+### So'rov (Form Data / Multipart)
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `form_element_id` | `string` / `number` | Ha | Forma elementining identifikatori. Masalan: `"45"` |
+| `file` | `binary` (file) | Ha | Yuklanayotgan fayl (rasm: JPG, PNG va h.k.) |
+
+**Request namunasi (cURL):**
+```bash
+curl --location 'https://zal360.uz/file/api/v1/upload/form' \
+--header 'Authorization: Bearer eyJra...' \
+--form 'form_element_id="45"' \
+--form 'file=@"/Users/user/Downloads/photo.jpg"'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### 1. Muvaffaqiyatli javob (200 OK)
+Fayl muvaffaqiyatli yuklanganda uning `id`, `name`, `size` va boshqa ma'lumotlari qaytadi. Ushbu `id` ni keyingi API'larda rasm ID si sifatida ishlatiladi:
+
+```json
+{
+    "id": "8a818196143b5539a5ca264e",
+    "name": "2026-08-15 14.25.55",
+    "size": 58179,
+    "extension": "jpg",
+    "contentType": "image/jpeg",
+    "createdAt": "18.08.2026 09:14:47"
+}
+```
+
+---
+
+## 9. Mijoz ma'lumotlarini kiritish / qo'shish (Add Client)
+
+Foydalanuvchi tizimga kirgandan so'ng, o'zining shaxsiy ma'lumotlarini (F.I.O, jinsi, PINFL, rasm ID) to'ldirib ro'yxatdan o'tkazish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
 
 - **URL:** `/v1/post/client`
 - **Method:** `POST`
@@ -606,7 +651,7 @@ Foydalanuvchi tizimga kirgandan so'ng, o'zining shaxsiy ma'lumotlarini (F.I.O, j
 | `full_name` | `string` | Ha | Mijozning to'liq ismi sharifi. Masalan: `Ali Valiyev` |
 | `gender` | `string` | Ha | Jinsi (`male` yoki `female`) |
 | `pinfl` | `number` / `integer` | Ha | 14 xonali JSHSHIR (PINFL). Masalan: `12345678901234` |
-| `photo` | `string` | Ha | Mijoz rasmiga havola yoki base64 string |
+| `photo` | `string` | Ha | Fayl yuklash API'dan qaytgan fayl `id` si. Masalan: `8a818196143b5539a5ca264e` |
 
 **Request namunasi (cURL):**
 ```bash
@@ -617,7 +662,7 @@ curl --location 'https://zal360.uz/endpoint/api/v1/post/client' \
   "full_name": "Ali Valiyev",
   "gender": "male",
   "pinfl": 12345678901234,
-  "photo": "dfsdfsdfsd32ssdf"
+  "photo": "8a818196143b5539a5ca264e"
 }'
 ```
 
