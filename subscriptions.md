@@ -155,3 +155,58 @@ Filial tariflari mavjud bo'lganda quyidagi formatda massiv qaytadi:
     "statusText": "OK"
 }
 ```
+
+---
+
+## 3. Tarif tanlab obuna so'rovini yuborish (Create Client Subscription Request)
+
+Mijoz tanlagan sport zali filiali va tarifi (obunasi) bo'yicha obuna so'rovini yaratish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
+
+- **URL:** `/mobile/v1/post/client_subscriptions`
+- **Method:** `POST`
+- **Headers:** 
+  - `Authorization: Bearer <token>`
+  - `Content-Type: application/json`
+
+### So'rov (Request Body)
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `org_id` | `string` (UUID) | Ha | Tashkilot identifikatori |
+| `branch_id` | `string` (UUID) | Ha | Filial identifikatori |
+| `subscription_id` | `string` (UUID) | Ha | Tanlangan tarif (obuna) identifikatori |
+
+**Request namunasi (cURL):**
+```bash
+curl --location 'https://zal360.uz/endpoint/api/mobile/v1/post/client_subscriptions' --header 'Authorization: Bearer eyJra...' --header 'Content-Type: application/json' --data '{
+  "org_id": "9148a242-7de9-4ac2-9d2f-9427aed3742c",
+  "branch_id": "c6cfd8b2-4f7c-4eab-ae1e-b476ae59ef8c",
+  "subscription_id": "66f10d0a-caab-4549-8106-7f14bd811ba3"
+}'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### 1. Muvaffaqiyatli javob (200 OK)
+Obuna so'rovi muvaffaqiyatli yaratilganda yangi yaratilgan yozuvning `id` si (`insert.id`) qaytadi:
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-18T09:17:29.824+00:00",
+    "code": null,
+    "path": null,
+    "data": {
+        "response": {},
+        "insert": {
+            "id": "b5229032-0433-4d52-b681-911b269d232a"
+        }
+    },
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
