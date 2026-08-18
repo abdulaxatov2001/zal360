@@ -36,7 +36,7 @@ curl --location 'https://zal360.uz/endpoint/api/mobile/v1/register' \
 
 ### Javoblar (Responses)
 
-#### Muvaffaqiyatli javob (200 OK)
+#### 1. Muvaffaqiyatli javob (200 OK)
 SMS kod muvaffaqiyatli yuborilganda `session_id` qaytadi. Ushbu `session_id` keyingi bosqichda kodni tasdiqlash uchun kerak bo'ladi.
 
 ```json
@@ -57,8 +57,8 @@ SMS kod muvaffaqiyatli yuborilganda `session_id` qaytadi. Ushbu `session_id` key
 }
 ```
 
-#### Xatolik: Avval ro'yxatdan o'tilgan (400 Bad Request)
-Agar kiritilgan telefon raqam tizimda avval mavjud bo'lsa:
+#### 2. Xatolik: Avval ro'yxatdan o'tilgan (400 Bad Request)
+Agar kiritilgan telefon raqam tizimda avval mavjud bo'lsa, tizim ro'yxatdan o'tishni rad etadi:
 
 ```json
 {
@@ -74,7 +74,7 @@ Agar kiritilgan telefon raqam tizimda avval mavjud bo'lsa:
 }
 ```
 
-#### Xatolik: Vaqt cheklovi / Spam limit (400 Bad Request)
+#### 3. Xatolik: Qayta yuborish limiti / Spam cheklovi (400 Bad Request)
 Agar 2 daqiqa ichida qayta kod so'ralsa:
 
 ```json
@@ -95,7 +95,7 @@ Agar 2 daqiqa ichida qayta kod so'ralsa:
 
 ## 2. Ro'yxatdan o'tishni tasdiqlash (Check SMS Code & Auto Login)
 
-Foydalanuvchi telefoniga kelgan 4 xonali SMS kodni `session_id` bilan birga yuborib tasdiqlaydi. Kod to'g'ri bo'lsa, tizimda user yaratiladi va avtomatik ravishda to'liq login tokenlari qaytariladi.
+Foydalanuvchi telefoniga kelgan 4 xonali SMS kodni `session_id` bilan birga yuborib tasdiqlaydi. Kod to'g'ri bo'lsa, tizimda foydalanuvchi yaratiladi va avtomatik ravishda to'liq login tokenlari qaytariladi.
 
 - **URL:** `/mobile/v1/check_code/sms`
 - **Method:** `POST`
@@ -122,8 +122,8 @@ curl --location 'https://zal360.uz/endpoint/api/mobile/v1/check_code/sms' \
 
 ### Javoblar (Responses)
 
-#### Muvaffaqiyatli javob (200 OK)
-Kod to'g'ri bo'lganda yangi foydalanuvchi yaratiladi va `data.login.data` ichida uning `access_token` va `refresh_token` lari qaytadi.
+#### 1. Muvaffaqiyatli javob (200 OK)
+Kod to'g'ri bo'lganda yangi foydalanuvchi yaratiladi va `data.login.data` ichida uning `access_token` hamda `refresh_token` lari qaytadi.
 
 ```json
 {
@@ -141,8 +141,8 @@ Kod to'g'ri bo'lganda yangi foydalanuvchi yaratiladi va `data.login.data` ichida
             "status": 200,
             "timestamp": 1787024053227,
             "data": {
-                "access_token": "eyJraWQiOiIxMmQyNzRi...",
-                "refresh_token": "eyJraWQiOiIxMmQyNzRi...",
+                "access_token": "eyJraWQiOiIxMmQyNzRiNC00MTZlLTQ5YWYtYWFjNS04MTA0MzQ1MjVmNzEiLCJhbGciOiJSUzI1NiJ9...",
+                "refresh_token": "eyJraWQiOiIxMmQyNzRiNC00MTZlLTQ5YWYtYWFjNS04MTA0MzQ1MjVmNzEiLCJhbGciOiJSUzI1NiJ9...",
                 "token_type": "Bearer",
                 "expires_in": 1787112053199,
                 "refresh_expires_in": 1787289053217
@@ -156,7 +156,7 @@ Kod to'g'ri bo'lganda yangi foydalanuvchi yaratiladi va `data.login.data` ichida
 }
 ```
 
-#### Xatolik: Kod noto'g'ri (400 Bad Request)
+#### 2. Xatolik: Tasdiqlash kodi noto'g'ri (400 Bad Request)
 ```json
 {
     "error": "400 BAD_REQUEST \"400 BAD_REQUEST \"Kiritilgan tasdiqlash kodi noto‘g‘ri\"\"",
@@ -171,7 +171,7 @@ Kod to'g'ri bo'lganda yangi foydalanuvchi yaratiladi va `data.login.data` ichida
 }
 ```
 
-#### Xatolik: Sessiya topilmadi yoki muddati tugagan (400 Bad Request)
+#### 3. Xatolik: Sessiya topilmadi yoki muddati tugagan (400 Bad Request)
 ```json
 {
     "error": "400 BAD_REQUEST \"400 BAD_REQUEST \"Sessiya topilmadi yoki kodning amal qilish muddati tugagan\"\"",
@@ -190,7 +190,7 @@ Kod to'g'ri bo'lganda yangi foydalanuvchi yaratiladi va `data.login.data` ichida
 
 ## 3. Tizimga kirish (Login)
 
-Mavjud foydalanuvchini avtorizatsiya qilish va unga yangi `access_token` va `refresh_token` berish uchun ishlatiladi.
+Mavjud foydalanuvchini avtorizatsiya qilish va unga yangi `access_token` hamda `refresh_token` berish uchun ishlatiladi.
 
 - **URL:** `/mobile/v1/login`
 - **Method:** `POST`
@@ -217,7 +217,7 @@ curl --location 'https://zal360.uz/endpoint/api/mobile/v1/login' \
 
 ### Javoblar (Responses)
 
-#### Muvaffaqiyatli javob (200 OK)
+#### 1. Muvaffaqiyatli javob (200 OK)
 Login va parol to'g'ri bo'lsa, tizim yangi tokenlarni `data.data` ob'ektida qaytaradi.
 
 ```json
@@ -251,7 +251,7 @@ Login va parol to'g'ri bo'lsa, tizim yangi tokenlarni `data.data` ob'ektida qayt
 }
 ```
 
-#### Xatolik: Login yoki parol noto'g'ri (400 Bad Request / 401 Unauthorized)
+#### 2. Xatolik: Login yoki parol noto'g'ri (400 Bad Request / 401 Unauthorized)
 ```json
 {
     "error": "400 BAD_REQUEST \"Remote endpoint [http://10.1.1.22:8084/auth/api/v1/login] returned error on stage _body: 401 on POST request for \\\"http://10.1.1.22:8084/auth/api/v1/login\\\": [no body]\"",
@@ -297,7 +297,7 @@ curl --location --request PUT 'https://zal360.uz/endpoint/api/mobile/v1/update_p
 
 ### Javoblar (Responses)
 
-#### Muvaffaqiyatli javob (200 OK)
+#### 1. Muvaffaqiyatli javob (200 OK)
 SMS kod yuborilganda `session_id` qaytadi.
 
 ```json
@@ -321,7 +321,7 @@ SMS kod yuborilganda `session_id` qaytadi.
 }
 ```
 
-#### Xatolik: Foydalanuvchi topilmadi (Ro'yxatdan o'tmagan)
+#### 2. Xatolik: Foydalanuvchi topilmadi (Raqam ro'yxatdan o'tmagan)
 ```json
 {
     "error": null,
@@ -342,7 +342,7 @@ SMS kod yuborilganda `session_id` qaytadi.
 }
 ```
 
-#### Xatolik: Vaqt cheklovi / Spam limit
+#### 3. Xatolik: Qayta yuborish limiti / Spam cheklovi
 ```json
 {
     "error": null,
@@ -394,7 +394,7 @@ curl --location 'https://zal360.uz/endpoint/api/mobile/v1/forgot/check_code' \
 
 ### Javoblar (Responses)
 
-#### Muvaffaqiyatli javob (200 OK)
+#### 1. Muvaffaqiyatli javob (200 OK)
 Parol yangilanadi va `data.login.data` ichida avtomatik kirish tokenlari qaytariladi.
 
 ```json
@@ -425,7 +425,7 @@ Parol yangilanadi va `data.login.data` ichida avtomatik kirish tokenlari qaytari
 }
 ```
 
-#### Xatolik: Kod noto'g'ri (400 Bad Request)
+#### 2. Xatolik: Tasdiqlash kodi noto'g'ri (400 Bad Request)
 ```json
 {
     "error": "400 BAD_REQUEST \"400 BAD_REQUEST \"Kiritilgan tasdiqlash kodi noto‘g‘ri\"\"",
@@ -440,7 +440,7 @@ Parol yangilanadi va `data.login.data` ichida avtomatik kirish tokenlari qaytari
 }
 ```
 
-#### Xatolik: Sessiya topilmadi yoki muddati tugagan (400 Bad Request)
+#### 3. Xatolik: Sessiya topilmadi yoki muddati tugagan (400 Bad Request)
 ```json
 {
     "error": "400 BAD_REQUEST \"400 BAD_REQUEST \"Sessiya topilmadi yoki kodning amal qilish muddati tugagan\"\"",
@@ -478,7 +478,7 @@ curl --location 'https://zal360.uz/endpoint/api/mobile/v1/get/branch_by_org_id' 
 
 ### Javoblar (Responses)
 
-#### Muvaffaqiyatli javob (Filiallar mavjud bo'lsa)
+#### 1. Muvaffaqiyatli javob (Filiallar mavjud bo'lsa - 200 OK)
 ```json
 {
     "error": null,
@@ -507,7 +507,7 @@ curl --location 'https://zal360.uz/endpoint/api/mobile/v1/get/branch_by_org_id' 
 }
 ```
 
-#### Bo'sh javob (Filiallar mavjud bo'lmasa)
+#### 2. Bo'sh javob (Filiallar mavjud bo'lmasa - 200 OK)
 ```json
 {
     "error": null,
@@ -560,7 +560,7 @@ curl --location 'https://zal360.uz/endpoint/api/v1/post/clients' \
 
 ### Javoblar (Responses)
 
-#### Muvaffaqiyatli javob (200 OK)
+#### 1. Muvaffaqiyatli javob (200 OK)
 ```json
 {
     "error": null,
@@ -578,7 +578,7 @@ curl --location 'https://zal360.uz/endpoint/api/v1/post/clients' \
 }
 ```
 
-#### Xatolik: Avval ro'yxatdan o'tgan (400 Bad Request)
+#### 2. Xatolik: Avval ro'yxatdan o'tgan (400 Bad Request)
 ```json
 {
     "error": "400 BAD_REQUEST \"bu foydalanuvchi avval ro'yhatdan o'tgan\"",
