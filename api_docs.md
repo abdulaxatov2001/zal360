@@ -589,11 +589,11 @@ curl --location 'https://zal360.uz/endpoint/api/mobile/v1/get/branch_by_org_id' 
 
 ---
 
-## 8. Mijoz qo'shish (Add Client)
+## 8. Mijoz ma'lumotlarini kiritish / qo'shish (Add Client)
 
-Yangi mijozni (client) ro'yxatdan o'tkazish uchun ishlatiladi. API avtorizatsiya talab qiladi.
+Foydalanuvchi tizimga kirgandan so'ng, o'zining shaxsiy ma'lumotlarini (F.I.O, jinsi, PINFL, rasm) to'ldirib ro'yxatdan o'tkazish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
 
-- **URL:** `/v1/post/clients`
+- **URL:** `/v1/post/client`
 - **Method:** `POST`
 - **Headers:** 
   - `Authorization: Bearer <token>`
@@ -605,19 +605,19 @@ Yangi mijozni (client) ro'yxatdan o'tkazish uchun ishlatiladi. API avtorizatsiya
 | :--- | :--- | :---: | :--- |
 | `full_name` | `string` | Ha | Mijozning to'liq ismi sharifi. Masalan: `Ali Valiyev` |
 | `gender` | `string` | Ha | Jinsi (`male` yoki `female`) |
-| `pinfl` | `string` | Ha | JSHSHIR (PINFL). Masalan: `1234354543534` |
+| `pinfl` | `number` / `integer` | Ha | 14 xonali JSHSHIR (PINFL). Masalan: `12345678901234` |
 | `photo` | `string` | Ha | Mijoz rasmiga havola yoki base64 string |
 
 **Request namunasi (cURL):**
 ```bash
-curl --location 'https://zal360.uz/endpoint/api/v1/post/clients' \
+curl --location 'https://zal360.uz/endpoint/api/v1/post/client' \
 --header 'Authorization: Bearer eyJra...' \
 --header 'Content-Type: application/json' \
 --data '{
-     "full_name":"Ali Valiyev",
-     "gender":"male",
-     "pinfl":"1234354543534",
-     "photo":"pdsd1221231dssfd"
+  "full_name": "Ali Valiyev",
+  "gender": "male",
+  "pinfl": 12345678901234,
+  "photo": "dfsdfsdfsd32ssdf"
 }'
 ```
 
@@ -626,14 +626,18 @@ curl --location 'https://zal360.uz/endpoint/api/v1/post/clients' \
 ### Javoblar (Responses)
 
 #### 1. Muvaffaqiyatli javob (200 OK)
+Mijoz ma'lumotlari muvaffaqiyatli saqlanganda quyidagi javob qaytadi:
+
 ```json
 {
     "error": null,
     "message": null,
-    "timestamp": "2026-08-17T08:35:00.183+00:00",
+    "timestamp": "2026-08-18T04:07:17.326+00:00",
     "code": null,
     "path": null,
     "data": {
+        "exist": false,
+        "valid_phone": {},
         "response": {},
         "insert": {}
     },
@@ -644,13 +648,15 @@ curl --location 'https://zal360.uz/endpoint/api/v1/post/clients' \
 ```
 
 #### 2. Xatolik: Avval ro'yxatdan o'tgan (400 Bad Request)
+Agar kiritilgan foydalanuvchi ma'lumotlari (masalan, PINFL) orqali tizimda avval mijoz sifatida ro'yxatdan o'tilgan bo'lsa:
+
 ```json
 {
     "error": "400 BAD_REQUEST \"bu foydalanuvchi avval ro'yhatdan o'tgan\"",
     "message": "bu foydalanuvchi avval ro'yhatdan o'tgan",
-    "timestamp": "2026-08-17T08:44:59.863+00:00",
+    "timestamp": "2026-08-18T04:05:55.195+00:00",
     "code": null,
-    "path": "/v1/post/clients",
+    "path": "/v1/post/client",
     "data": null,
     "response": null,
     "status": 400,
