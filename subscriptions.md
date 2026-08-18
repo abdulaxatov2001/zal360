@@ -77,3 +77,81 @@ Filiallar ro'yxati mavjud bo'lganda quyidagi formatda to'liq ma'lumotlar massivi
     "statusText": "OK"
 }
 ```
+
+---
+
+## 2. Filial tariflarini / obunalarini olish (Get Branch Subscriptions)
+
+Tanlangan filialga tegishli barcha tariflar (obunalar) ro'yxatini (nomi, vaqti, xizmat turi va narxi) olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
+
+- **URL:** `/mobile/v1/get/branche_subscriptions`
+- **Method:** `GET`
+- **Headers:** 
+  - `Authorization: Bearer <token>`
+  - `Content-Type: application/json`
+
+### So'rov (Request Body)
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `branch_id` | `string` (UUID) | Ha | Tariflari olinayotgan filialning identifikatori |
+
+**Request namunasi (cURL):**
+```bash
+curl --location --request GET 'https://zal360.uz/endpoint/api/mobile/v1/get/branche_subscriptions' --header 'Authorization: Bearer eyJra...' --header 'Content-Type: application/json' --data '{
+  "branch_id": "7a5c35dd-98cc-41cf-a34f-db17cfa6190f"
+}'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### 1. Muvaffaqiyatli javob (200 OK)
+Filial tariflari mavjud bo'lganda quyidagi formatda massiv qaytadi:
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-18T09:22:18.563+00:00",
+    "code": null,
+    "path": null,
+    "data": [
+        {
+            "id": "66f10d0a-caab-4549-8106-7f14bd811ba3",
+            "name": "bronze",
+            "start_time": "08:00:00",
+            "end_time": "22:00:00",
+            "service_type": "Фитнес",
+            "price": 300000.00
+        },
+        {
+            "id": "e7ae0a4c-75da-4bbf-a1d9-53d402fdf3c6",
+            "name": "gold",
+            "start_time": "00:00:00",
+            "end_time": "00:00:00",
+            "service_type": "Бокс",
+            "price": 1000000.00
+        }
+    ],
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
+
+#### 2. Bo'sh javob (Tariflar topilmasa - 200 OK)
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-18T09:22:18.563+00:00",
+    "code": null,
+    "path": null,
+    "data": [],
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
