@@ -1,14 +1,17 @@
 # Mobile API Hujjatlari (API Documentation)
 
-Ushbu hujjat mobil ilova dasturchilari uchun tayyorlangan bo'lib, server bilan aloqa qilishda ishlatiladigan barcha API'larni o'z ichiga oladi. Asosiy domen: `https://zal360.uz/endpoint/api`
+Ushbu hujjat mobil ilova dasturchilari uchun tayyorlangan bo'lib, server bilan aloqa qilishda ishlatiladigan barcha asosiy API'larni o'z ichiga oladi.
+
+- **Asosiy domen:** `https://zal360.uz/endpoint/api`
+- **Autentifikatsiya formati:** `Authorization: Bearer <access_token>`
 
 ---
 
-## 1. SMS kod yuborish
+## 1. Ro'yxatdan o'tish (Register - SMS kod yuborish)
 
-Foydalanuvchining telefon raqamiga tasdiqlash kodini (SMS) yuborish uchun ishlatiladi. Agar tizimda ushbu raqamga allaqachon kod yuborilgan bo'lsa (va hali muddati tugamagan bo'lsa), API xatolik qaytaradi.
+Yangi foydalanuvchini ro'yxatdan o'tkazish uchun telefon raqam va parol qabul qilinadi hamda tasdiqlash kodi (SMS) yuboriladi.
 
-- **URL:** `/mobile/v1/sent_code/sms`
+- **URL:** `/mobile/v1/register`
 - **Method:** `POST`
 - **Content-Type:** `application/json`
 
@@ -16,14 +19,16 @@ Foydalanuvchining telefon raqamiga tasdiqlash kodini (SMS) yuborish uchun ishlat
 
 | Parametr | Turi | Majburiymi? | Izoh |
 | :--- | :--- | :---: | :--- |
-| `phone` | `string` | Ha | Foydalanuvchining telefon raqami (kodisiz yoki kod bilan). Masalan: `998943234311` |
+| `phone` | `string` | Ha | Foydalanuvchining telefon raqami. Masalan: `998943234311` |
+| `password` | `string` | Ha | Foydalanuvchi tanlagan parol. Masalan: `121` |
 
 **Request namunasi (cURL):**
 ```bash
-curl --location 'https://zal360.uz/endpoint/api/mobile/v1/sent_code/sms' \
+curl --location 'https://zal360.uz/endpoint/api/mobile/v1/register' \
 --header 'Content-Type: application/json' \
 --data '{
-    "phone": "998943234311"
+  "phone": "998943234311",
+  "password": "121"
 }'
 ```
 
@@ -32,32 +37,53 @@ curl --location 'https://zal360.uz/endpoint/api/mobile/v1/sent_code/sms' \
 ### Javoblar (Responses)
 
 #### Muvaffaqiyatli javob (200 OK)
-Kod muvaffaqiyatli yuborilganda quyidagi ma'lumot qaytadi.
+SMS kod muvaffaqiyatli yuborilganda `session_id` qaytadi. Ushbu `session_id` keyingi bosqichda kodni tasdiqlash uchun kerak bo'ladi.
 
 ```json
 {
     "error": null,
     "message": null,
-    "timestamp": "2026-08-13T13:03:50.751+00:00",
+    "timestamp": "2026-08-17T12:06:08.736+00:00",
     "code": null,
     "path": null,
-    "data": {},
-    "response": null,
+    "data": {
+        "session_id": "ANmnnvxQDyRGzKjEyrzGzOGsaEnbqCE8",
+        "message": "Tasdiqlash kodi telefon raqamingizga yuborildi",
+        "status": true
+    },
+    "response": {},
     "status": 200,
     "statusText": "OK"
 }
 ```
 
-#### Xatolik javobi (400 Bad Request)
-Agar foydalanuvchiga allaqachon kod yuborilgan bo'lsa va uning vaqti hali tugamagan bo'lsa, quyidagi xatolik (Already code send) qaytadi. Dasturchi buni ushlab "Kod allaqachon yuborilgan" degan xabarni chiqarishi kerak.
+#### Xatolik: Avval ro'yxatdan o'tilgan (400 Bad Request)
+Agar kiritilgan telefon raqam tizimda avval mavjud bo'lsa:
 
 ```json
 {
-    "error": "400 BAD_REQUEST \"400 BAD_REQUEST \\\"Already code send\\\"\"",
-    "message": "Error on stage save_code : 400 BAD_REQUEST \"Already code send\"",
-    "timestamp": "2026-08-13T13:01:51.762+00:00",
+    "error": "400 BAD_REQUEST \"400 BAD_REQUEST \"bu raqam bilan avval tizimdan ro`yhatdan o`tilgan\"\"",
+    "message": "Error on stage _body : 400 BAD_REQUEST \"bu raqam bilan avval tizimdan ro`yhatdan o`tilgan\"",
+    "timestamp": "2026-08-18T03:27:28.399+00:00",
     "code": null,
-    "path": "/mobile/v1/sent_code/sms",
+    "path": "/mobile/v1/register",
+    "data": null,
+    "response": null,
+    "status": 400,
+    "statusText": "Bad Request"
+}
+```
+
+#### Xatolik: Vaqt cheklovi / Spam limit (400 Bad Request)
+Agar 2 daqiqa ichida qayta kod so'ralsa:
+
+```json
+{
+    "error": "400 BAD_REQUEST \"400 BAD_REQUEST \"Kod allaqachon yuborilgan, 2 daqiqadan so‘ng qayta urinib ko‘ring\"\"",
+    "message": "Error on stage _body : 400 BAD_REQUEST \"Kod allaqachon yuborilgan, 2 daqiqadan so‘ng qayta urinib ko‘ring\"",
+    "timestamp": "2026-08-18T03:29:22.959+00:00",
+    "code": null,
+    "path": "/mobile/v1/register",
     "data": null,
     "response": null,
     "status": 400,
@@ -67,9 +93,9 @@ Agar foydalanuvchiga allaqachon kod yuborilgan bo'lsa va uning vaqti hali tugama
 
 ---
 
-## 2. SMS kodni tasdiqlash (Check code)
+## 2. Ro'yxatdan o'tishni tasdiqlash (Check SMS Code & Auto Login)
 
-Foydalanuvchi telefoniga kelgan kodni tekshirish uchun ishlatiladi.
+Foydalanuvchi telefoniga kelgan 4 xonali SMS kodni `session_id` bilan birga yuborib tasdiqlaydi. Kod to'g'ri bo'lsa, tizimda user yaratiladi va avtomatik ravishda to'liq login tokenlari qaytariladi.
 
 - **URL:** `/mobile/v1/check_code/sms`
 - **Method:** `POST`
@@ -79,16 +105,16 @@ Foydalanuvchi telefoniga kelgan kodni tekshirish uchun ishlatiladi.
 
 | Parametr | Turi | Majburiymi? | Izoh |
 | :--- | :--- | :---: | :--- |
-| `phone` | `string` | Ha | Foydalanuvchining telefon raqami. Masalan: `998943234311` |
-| `code` | `string` | Ha | Foydalanuvchiga yuborilgan tasdiqlash kodi. Masalan: `6268` |
+| `session_id` | `string` | Ha | Register API'dan qaytgan 32 belgili sessiya ID si |
+| `code` | `string` | Ha | Telefonga SMS orqali borgan 4 xonali tasdiqlash kodi. Masalan: `1897` |
 
 **Request namunasi (cURL):**
 ```bash
 curl --location 'https://zal360.uz/endpoint/api/mobile/v1/check_code/sms' \
 --header 'Content-Type: application/json' \
 --data '{
-    "phone": "998943234311",
-    "code": "6268"
+    "session_id": "kP9oiwjHwUeQuI4pXY3J8pe6V3Ylb4Q5",
+    "code": "1897"
 }'
 ```
 
@@ -96,21 +122,33 @@ curl --location 'https://zal360.uz/endpoint/api/mobile/v1/check_code/sms' \
 
 ### Javoblar (Responses)
 
-Bu API doim **200 OK** bilan javob qaytaradi. Dasturchi kodning to'g'ri yoki noto'g'ri ekanligini `data.result` ga qarab ajratib olishi kerak.
-
-#### Muvaffaqiyatli javob (Kod to'g'ri)
-Agar kiritilgan kod to'g'ri bo'lsa, `data.result` qiymati `true` qaytadi.
+#### Muvaffaqiyatli javob (200 OK)
+Kod to'g'ri bo'lganda yangi foydalanuvchi yaratiladi va `data.login.data` ichida uning `access_token` va `refresh_token` lari qaytadi.
 
 ```json
 {
     "error": null,
     "message": null,
-    "timestamp": "2026-08-13T13:06:16.643+00:00",
+    "timestamp": "2026-08-18T03:34:13.228+00:00",
     "code": null,
     "path": null,
     "data": {
-        "result": true,
-        "response": {}
+        "response": {
+            "statusCode": "OK",
+            "statusCodeValue": 200
+        },
+        "login": {
+            "status": 200,
+            "timestamp": 1787024053227,
+            "data": {
+                "access_token": "eyJraWQiOiIxMmQyNzRi...",
+                "refresh_token": "eyJraWQiOiIxMmQyNzRi...",
+                "token_type": "Bearer",
+                "expires_in": 1787112053199,
+                "refresh_expires_in": 1787289053217
+            },
+            "statusText": "OK"
+        }
     },
     "response": {},
     "status": 200,
@@ -118,19 +156,206 @@ Agar kiritilgan kod to'g'ri bo'lsa, `data.result` qiymati `true` qaytadi.
 }
 ```
 
-#### Xatolik javobi (Kod noto'g'ri)
-Agar kiritilgan kod noto'g'ri bo'lsa, `data.result` qiymati `false` qaytadi. Dasturchi buni tekshirib, foydalanuvchiga "Kod noto'g'ri kiritildi" xabarini chiqarishi kerak.
+#### Xatolik: Kod noto'g'ri (400 Bad Request)
+```json
+{
+    "error": "400 BAD_REQUEST \"400 BAD_REQUEST \"Kiritilgan tasdiqlash kodi noto‘g‘ri\"\"",
+    "message": "Error on stage check : 400 BAD_REQUEST \"Kiritilgan tasdiqlash kodi noto‘g‘ri\"",
+    "timestamp": "2026-08-18T03:32:55.903+00:00",
+    "code": null,
+    "path": "/mobile/v1/check_code/sms",
+    "data": null,
+    "response": null,
+    "status": 400,
+    "statusText": "Bad Request"
+}
+```
+
+#### Xatolik: Sessiya topilmadi yoki muddati tugagan (400 Bad Request)
+```json
+{
+    "error": "400 BAD_REQUEST \"400 BAD_REQUEST \"Sessiya topilmadi yoki kodning amal qilish muddati tugagan\"\"",
+    "message": "Error on stage check : 400 BAD_REQUEST \"Sessiya topilmadi yoki kodning amal qilish muddati tugagan\"",
+    "timestamp": "2026-08-18T03:34:57.512+00:00",
+    "code": null,
+    "path": "/mobile/v1/check_code/sms",
+    "data": null,
+    "response": null,
+    "status": 400,
+    "statusText": "Bad Request"
+}
+```
+
+---
+
+## 3. Tizimga kirish (Login)
+
+Mavjud foydalanuvchini avtorizatsiya qilish va unga yangi `access_token` va `refresh_token` berish uchun ishlatiladi.
+
+- **URL:** `/mobile/v1/login`
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+
+### So'rov (Request Body)
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `username` | `string` | Ha | Foydalanuvchi logini (odatda `user` + telefon raqam). Masalan: `user998943234311` |
+| `password` | `string` | Ha | Foydalanuvchi paroli. Masalan: `2` |
+
+**Request namunasi (cURL):**
+```bash
+curl --location 'https://zal360.uz/endpoint/api/mobile/v1/login' \
+--header 'Content-Type: application/json' \
+--data '{
+  "username": "user998943234311",
+  "password": "2"
+}'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### Muvaffaqiyatli javob (200 OK)
+Login va parol to'g'ri bo'lsa, tizim yangi tokenlarni `data.data` ob'ektida qaytaradi.
 
 ```json
 {
     "error": null,
     "message": null,
-    "timestamp": "2026-08-13T13:05:25.158+00:00",
+    "timestamp": "2026-08-18T03:30:36.790+00:00",
     "code": null,
     "path": null,
     "data": {
-        "result": false,
-        "response": {}
+        "status": 200,
+        "timestamp": 1787023836789,
+        "data": {
+            "access_token": "eyJraWQiOiIxMmQyNzRiNC00MTZlLTQ5YWYtYWFjNS04MTA0MzQ1MjVmNzEiLCJhbGciOiJSUzI1NiJ9...",
+            "refresh_token": "eyJraWQiOiIxMmQyNzRiNC00MTZlLTQ5YWYtYWFjNS04MTA0MzQ1MjVmNzEiLCJhbGciOiJSUzI1NiJ9...",
+            "token_type": "Bearer",
+            "expires_in": 1787111836753,
+            "refresh_expires_in": 1787288836773
+        },
+        "statusText": "OK"
+    },
+    "response": {
+        "headers": {
+            "Content-Type": [
+                "application/json"
+            ]
+        }
+    },
+    "status": 200,
+    "statusText": "OK"
+}
+```
+
+#### Xatolik: Login yoki parol noto'g'ri (400 Bad Request / 401 Unauthorized)
+```json
+{
+    "error": "400 BAD_REQUEST \"Remote endpoint [http://10.1.1.22:8084/auth/api/v1/login] returned error on stage _body: 401 on POST request for \\\"http://10.1.1.22:8084/auth/api/v1/login\\\": [no body]\"",
+    "message": "Remote endpoint [http://10.1.1.22:8084/auth/api/v1/login] returned error on stage _body: 401 on POST request for \"http://10.1.1.22:8084/auth/api/v1/login\": [no body]",
+    "timestamp": "2026-08-18T03:31:09.573+00:00",
+    "code": null,
+    "path": "/mobile/v1/login",
+    "data": "RequestBody Base64: e3Bhc3N3b3JkPVsyXSwgdXNlcm5hbWU9W3VzZXI5OTg5NDMyMzQzMTddfQ==",
+    "response": null,
+    "status": 400,
+    "statusText": "Bad Request"
+}
+```
+
+---
+
+## 4. Parolni qayta tiklash (Forgot Password - SMS kod yuborish)
+
+Foydalanuvchi parolini unutganda, telefon raqami va yangi parolini kiritadi. Agar raqam tizimda mavjud bo'lsa, tasdiqlash uchun SMS kod yuboriladi.
+
+- **URL:** `/mobile/v1/update_password`
+- **Method:** `PUT`
+- **Content-Type:** `application/json`
+
+### So'rov (Request Body)
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `phone_number` | `string` | Ha | Foydalanuvchining telefon raqami. Masalan: `998943234311` |
+| `password` | `string` | Ha | O'rnatilishi kerak bo'lgan yangi parol. Masalan: `2` |
+
+**Request namunasi (cURL):**
+```bash
+curl --location --request PUT 'https://zal360.uz/endpoint/api/mobile/v1/update_password' \
+--header 'Content-Type: application/json' \
+--data '{
+    "phone_number": "998943234311",
+    "password": "2"
+}'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### Muvaffaqiyatli javob (200 OK)
+SMS kod yuborilganda `session_id` qaytadi.
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-18T03:36:31.078+00:00",
+    "code": null,
+    "path": null,
+    "data": {
+        "response": {},
+        "check": {
+            "session_id": "b5DhXg4K2BRH66kBbuy9YhXly1FRooM4",
+            "message": "Tasdiqlash kodi telefon raqamingizga yuborildi",
+            "status": true
+        }
+    },
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
+
+#### Xatolik: Foydalanuvchi topilmadi (Ro'yxatdan o'tmagan)
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-18T03:37:49.929+00:00",
+    "code": null,
+    "path": null,
+    "data": {
+        "response": {},
+        "check": {
+            "message": "998943234331 bu raqam avval tizimdan ro'yxatdan o'tmagan",
+            "status": 400
+        }
+    },
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
+
+#### Xatolik: Vaqt cheklovi / Spam limit
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-17T12:50:20.910+00:00",
+    "code": null,
+    "path": null,
+    "data": {
+        "response": {},
+        "check": {
+            "message": "Kod allaqachon yuborilgan, 2 daqiqadan so‘ng qayta urinib ko‘ring",
+            "status": 400
+        }
     },
     "response": {},
     "status": 200,
@@ -140,16 +365,108 @@ Agar kiritilgan kod noto'g'ri bo'lsa, `data.result` qiymati `false` qaytadi. Das
 
 ---
 
-## 3. Tashkilot filiallarini olish (Get Branches by Org ID)
+## 5. Parol yangilashni tasdiqlash (Forgot Check Code & Auto Login)
 
-Foydalanuvchi (tashkilot) ga tegishli bo'lgan barcha filiallar ro'yxatini olish uchun ishlatiladi. Bu API avtorizatsiya (token) talab qiladi.
+SMS orqali yuborilgan tasdiqlash kodini tekshiradi. Kod to'g'ri bo'lsa, foydalanuvchining yangi paroli bazada yangilanadi va darhol avtomatik login qilinib, yangi tokenlar qaytariladi.
+
+- **URL:** `/mobile/v1/forgot/check_code`
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+
+### So'rov (Request Body)
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `session_id` | `string` | Ha | `update_password` API'dan qaytgan 32 belgili sessiya ID si |
+| `code` | `string` | Ha | Telefonga yuborilgan 4 xonali SMS kod. Masalan: `7883` |
+
+**Request namunasi (cURL):**
+```bash
+curl --location 'https://zal360.uz/endpoint/api/mobile/v1/forgot/check_code' \
+--header 'Content-Type: application/json' \
+--data '{
+    "session_id": "FTg7YNDE8eYTKLDNsqwms3MiNjwBPrGw",
+    "code": "7883"
+}'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### Muvaffaqiyatli javob (200 OK)
+Parol yangilanadi va `data.login.data` ichida avtomatik kirish tokenlari qaytariladi.
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-18T03:42:39.073+00:00",
+    "code": null,
+    "path": null,
+    "data": {
+        "response": {},
+        "login": {
+            "status": 200,
+            "timestamp": 1787024559072,
+            "data": {
+                "access_token": "eyJraWQiOiIxMmQyNzRiNC00MTZlLTQ5YWYtYWFjNS04MTA0MzQ1MjVmNzEiLCJhbGciOiJSUzI1NiJ9...",
+                "refresh_token": "eyJraWQiOiIxMmQyNzRiNC00MTZlLTQ5YWYtYWFjNS04MTA0MzQ1MjVmNzEiLCJhbGciOiJSUzI1NiJ9...",
+                "token_type": "Bearer",
+                "expires_in": 1787112559054,
+                "refresh_expires_in": 1787289559064
+            },
+            "statusText": "OK"
+        }
+    },
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
+
+#### Xatolik: Kod noto'g'ri (400 Bad Request)
+```json
+{
+    "error": "400 BAD_REQUEST \"400 BAD_REQUEST \"Kiritilgan tasdiqlash kodi noto‘g‘ri\"\"",
+    "message": "Error on stage check : 400 BAD_REQUEST \"Kiritilgan tasdiqlash kodi noto‘g‘ri\"",
+    "timestamp": "2026-08-18T03:39:28.664+00:00",
+    "code": null,
+    "path": "/mobile/v1/forgot/check_code",
+    "data": null,
+    "response": null,
+    "status": 400,
+    "statusText": "Bad Request"
+}
+```
+
+#### Xatolik: Sessiya topilmadi yoki muddati tugagan (400 Bad Request)
+```json
+{
+    "error": "400 BAD_REQUEST \"400 BAD_REQUEST \"Sessiya topilmadi yoki kodning amal qilish muddati tugagan\"\"",
+    "message": "Error on stage check : 400 BAD_REQUEST \"Sessiya topilmadi yoki kodning amal qilish muddati tugagan\"",
+    "timestamp": "2026-08-18T03:38:56.500+00:00",
+    "code": null,
+    "path": "/mobile/v1/forgot/check_code",
+    "data": null,
+    "response": null,
+    "status": 400,
+    "statusText": "Bad Request"
+}
+```
+
+---
+
+## 6. Tashkilot filiallarini olish (Get Branches by Org ID)
+
+Foydalanuvchi (tashkilot) ga tegishli bo'lgan barcha filiallar ro'yxatini olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
 
 - **URL:** `/mobile/v1/get/branch_by_org_id`
 - **Method:** `GET`
 - **Headers:** `Authorization: Bearer <token>`
 
 ### So'rov (Request)
-Bu so'rov `GET` bo'lganligi uchun `body` qismi yo'q. Avtorizatsiya tokenini jo'natish kifoya.
+`GET` so'rovi bo'lgani sababli `body` yo'q, faqat `Authorization` header talab qilinadi.
 
 **Request namunasi (cURL):**
 ```bash
@@ -161,11 +478,7 @@ curl --location 'https://zal360.uz/endpoint/api/mobile/v1/get/branch_by_org_id' 
 
 ### Javoblar (Responses)
 
-Barcha javoblar `status: 200 OK` bilan qaytadi. Ma'lumotlar `data` massivi ichida keladi.
-
 #### Muvaffaqiyatli javob (Filiallar mavjud bo'lsa)
-Agar tashkilotning filiallari bo'lsa, ro'yxat ob'ektlar ko'rinishida qaytadi.
-
 ```json
 {
     "error": null,
@@ -195,8 +508,6 @@ Agar tashkilotning filiallari bo'lsa, ro'yxat ob'ektlar ko'rinishida qaytadi.
 ```
 
 #### Bo'sh javob (Filiallar mavjud bo'lmasa)
-Agar filiallar topilmasa, `data` bo'sh massiv (`[]`) shaklida qaytadi.
-
 ```json
 {
     "error": null,
@@ -213,7 +524,7 @@ Agar filiallar topilmasa, `data` bo'sh massiv (`[]`) shaklida qaytadi.
 
 ---
 
-## 4. Mijoz qo'shish (Add Client)
+## 7. Mijoz qo'shish (Add Client)
 
 Yangi mijozni (client) ro'yxatdan o'tkazish uchun ishlatiladi. API avtorizatsiya talab qiladi.
 
@@ -227,10 +538,10 @@ Yangi mijozni (client) ro'yxatdan o'tkazish uchun ishlatiladi. API avtorizatsiya
 
 | Parametr | Turi | Majburiymi? | Izoh |
 | :--- | :--- | :---: | :--- |
-| `full_name` | `string` | Ha | Mijozning to'liq ismi sharifi. Masalan: `nimadir` |
+| `full_name` | `string` | Ha | Mijozning to'liq ismi sharifi. Masalan: `Ali Valiyev` |
 | `gender` | `string` | Ha | Jinsi (`male` yoki `female`) |
 | `pinfl` | `string` | Ha | JSHSHIR (PINFL). Masalan: `1234354543534` |
-| `photo` | `string` | Ha | Mijoz rasmiga havola yoki base64. Masalan: `pdsd1221231dssfd` |
+| `photo` | `string` | Ha | Mijoz rasmiga havola yoki base64 string |
 
 **Request namunasi (cURL):**
 ```bash
@@ -238,8 +549,8 @@ curl --location 'https://zal360.uz/endpoint/api/v1/post/clients' \
 --header 'Authorization: Bearer eyJra...' \
 --header 'Content-Type: application/json' \
 --data '{
-     "full_name":"nimadir",
-     "gender":"male/female",
+     "full_name":"Ali Valiyev",
+     "gender":"male",
      "pinfl":"1234354543534",
      "photo":"pdsd1221231dssfd"
 }'
@@ -248,8 +559,6 @@ curl --location 'https://zal360.uz/endpoint/api/v1/post/clients' \
 ---
 
 ### Javoblar (Responses)
-
-Muvaffaqiyatli saqlanganda API `200 OK` statusi bilan quyidagi javobni qaytaradi. 
 
 #### Muvaffaqiyatli javob (200 OK)
 ```json
@@ -269,9 +578,7 @@ Muvaffaqiyatli saqlanganda API `200 OK` statusi bilan quyidagi javobni qaytaradi
 }
 ```
 
-#### Xatolik javobi (400 Bad Request)
-Agar kiritilgan foydalanuvchi tizimda avval ro'yxatdan o'tgan bo'lsa (masalan, PINFL orqali), quyidagi xatolik qaytadi:
-
+#### Xatolik: Avval ro'yxatdan o'tgan (400 Bad Request)
 ```json
 {
     "error": "400 BAD_REQUEST \"bu foydalanuvchi avval ro'yhatdan o'tgan\"",
@@ -279,229 +586,6 @@ Agar kiritilgan foydalanuvchi tizimda avval ro'yxatdan o'tgan bo'lsa (masalan, P
     "timestamp": "2026-08-17T08:44:59.863+00:00",
     "code": null,
     "path": "/v1/post/clients",
-    "data": null,
-    "response": null,
-    "status": 400,
-    "statusText": "Bad Request"
-}
-```
-
----
-
-## 5. Tizimga kirish (Login)
-
-Foydalanuvchini avtorizatsiya qilish va unga yangi `access_token` va `refresh_token` berish uchun ishlatiladi.
-
-- **URL:** `/mobile/v1/login`
-- **Method:** `POST`
-- **Content-Type:** `application/json`
-
-### So'rov (Request Body)
-
-| Parametr | Turi | Majburiymi? | Izoh |
-| :--- | :--- | :---: | :--- |
-| `username` | `string` | Ha | Foydalanuvchining logini (yoki telefon raqami). Masalan: `52410015910048` |
-| `password` | `string` | Ha | Parol. Masalan: `1` |
-
-**Request namunasi (cURL):**
-```bash
-curl --location 'https://zal360.uz/endpoint/api/mobile/v1/login' \
---header 'Content-Type: application/json' \
---data '{
-  "username": "52410015910048",
-  "password": "1"
-}'
-```
-
----
-
-### Javoblar (Responses)
-
-#### Muvaffaqiyatli javob (200 OK)
-Loging va parol to'g'ri bo'lsa, tizim yangi tokenlarni qaytaradi. Barcha kerakli tokenlar `data.data` ob'ekti ichida joylashgan bo'ladi.
-
-```json
-{
-    "error": null,
-    "message": null,
-    "timestamp": "2026-08-17T06:38:18.207+00:00",
-    "code": null,
-    "path": null,
-    "data": {
-        "status": 200,
-        "timestamp": 1786948698206,
-        "data": {
-            "access_token": "eyJraWQiOi...",
-            "refresh_token": "eyJra...",
-            "token_type": "Bearer",
-            "expires_in": 1787036698175,
-            "refresh_expires_in": 1787213698194
-        },
-        "statusText": "OK"
-    },
-    "response": {
-        "headers": {
-            "Content-Type": ["application/json"]
-        }
-    },
-    "status": 200,
-    "statusText": "OK"
-}
-```
-
-#### Xatolik javobi (400 Bad Request / 401 Unauthorized)
-Agar login yoki parol xato kiritilsa (yoki masalan body umuman berilmasa), avtorizatsiya serveri xatolik qaytaradi.
-
-```json
-{
-    "error": "400 BAD_REQUEST \"Remote endpoint [http://10.1.1.22:8084/auth/api/v1/login] returned error on stage _body: 401  on POST request for \\\"http://10.1.1.22:8084/auth/api/v1/login\\\": [no body]\"",
-    "message": "Remote endpoint [http://10.1.1.22:8084/auth/api/v1/login] returned error on stage _body: 401  on POST request for \"http://10.1.1.22:8084/auth/api/v1/login\": [no body]",
-    "timestamp": "2026-08-17T08:51:22.267+00:00",
-    "code": null,
-    "path": "/mobile/v1/login",
-    "data": "RequestBody Base64: e3Bhc3N3b3JkPVsyXSwgdXNlcm5hbWU9WzUyNDEwMDE1OTEwMDQ4XX0=",
-    "response": null,
-    "status": 400,
-    "statusText": "Bad Request"
-}
-```
-
----
-
-## 6. Ro'yxatdan o'tish (Register)
-
-Yangi foydalanuvchini tizimdan ro'yxatdan o'tkazish uchun ishlatiladi.
-
-- **URL:** `/mobile/v1/register`
-- **Method:** `POST`
-- **Content-Type:** `application/json`
-
-### So'rov (Request Body)
-
-| Parametr | Turi | Majburiymi? | Izoh |
-| :--- | :--- | :---: | :--- |
-| `phone` | `string` | Ha | Foydalanuvchining telefon raqami. Masalan: `998943234311` |
-| `password` | `string` | Ha | Foydalanuvchi paroli. Masalan: `121` |
-
-**Request namunasi (cURL):**
-```bash
-curl --location 'https://zal360.uz/endpoint/api/mobile/v1/register' \
---header 'Content-Type: application/json' \
---data '{
-  "phone": "998943234311",
-  "password": "121"
-}'
-```
-
----
-
-### Javoblar (Responses)
-
-Ikkala holatda ham API `200 OK` status qaytaradi. Natijani `data.status` maydoniga qarab ajratish kerak.
-
-#### Muvaffaqiyatli javob (Ro'yxatdan o'tdi)
-Foydalanuvchi muvaffaqiyatli saqlanganda `data.status` qiymati `true` qaytadi.
-
-```json
-{
-    "error": null,
-    "message": null,
-    "timestamp": "2026-08-17T08:55:06.968+00:00",
-    "code": null,
-    "path": null,
-    "data": {
-        "message": "Saqlandi",
-        "status": true
-    },
-    "response": {},
-    "status": 200,
-    "statusText": "OK"
-}
-```
-
-#### Xatolik javobi (Avval ro'yxatdan o'tgan)
-Agar bu raqam bilan avval ro'yxatdan o'tilgan bo'lsa, `data.status` qiymati `false` qaytadi. Dasturchi foydalanuvchiga "bu raqam bilan avval tizimdan ro'yxatdan o'tilgan" degan xabarni ko'rsatishi kerak.
-
-```json
-{
-    "error": null,
-    "message": null,
-    "timestamp": "2026-08-17T08:54:40.170+00:00",
-    "code": null,
-    "path": null,
-    "data": {
-        "message": "bu raqam bilan avval tizimdan ro`yhatdan o`tilgan",
-        "status": false
-    },
-    "response": {},
-    "status": 200,
-    "statusText": "OK"
-}
-```
-
----
-
-## 7. Parolni yangilash / qayta tiklash (Update Password)
-
-Foydalanuvchi parolini esdan chiqarganda yoki yangilamoqchi bo'lganda ishlatiladi. Odatda bu API'ga murojaat qilishdan oldin `sent_code/sms` va `check_code/sms` API'lari orqali foydalanuvchining raqami tasdiqlangan bo'lishi kerak.
-
-- **URL:** `/mobile/v1/update_password`
-- **Method:** `PUT`
-- **Content-Type:** `application/json`
-
-### So'rov (Request Body)
-
-| Parametr | Turi | Majburiymi? | Izoh |
-| :--- | :--- | :---: | :--- |
-| `phone_number` | `string` | Ha | Foydalanuvchining telefon raqami. Masalan: `998943234311` |
-| `password` | `string` | Ha | Yangi parol. Masalan: `2` |
-
-**Request namunasi (cURL):**
-```bash
-curl --location --request PUT 'https://zal360.uz/endpoint/api/mobile/v1/update_password' \
---header 'Content-Type: application/json' \
---data '{
-    "phone_number": "998943234311",
-    "password":"2"
-}'
-```
-
----
-
-### Javoblar (Responses)
-
-#### Muvaffaqiyatli javob (200 OK)
-Parol muvaffaqiyatli o'zgartirilganda quyidagi javob qaytadi.
-
-```json
-{
-    "error": null,
-    "message": null,
-    "timestamp": "2026-08-17T09:25:05.523+00:00",
-    "code": null,
-    "path": null,
-    "data": {
-        "exist": true,
-        "valid": {},
-        "response": {},
-        "update": {}
-    },
-    "response": {},
-    "status": 200,
-    "statusText": "OK"
-}
-```
-
-#### Xatolik javobi (400 Bad Request)
-Agar kiritilgan telefon raqam tizimda ro'yxatdan o'tmagan bo'lsa, xatolik qaytariladi. Dasturchi foydalanuvchiga "Bu raqam avval ro'yxatdan o'tmagan" mazmunida xabar berishi kerak.
-
-```json
-{
-    "error": "400 BAD_REQUEST \"99894323431 bu raqam avval tizimdan ro'yxatdan o'tmagan\"",
-    "message": "99894323431 bu raqam avval tizimdan ro'yxatdan o'tmagan",
-    "timestamp": "2026-08-17T09:26:00.608+00:00",
-    "code": null,
-    "path": "/mobile/v1/update_password",
     "data": null,
     "response": null,
     "status": 400,
