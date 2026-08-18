@@ -708,3 +708,73 @@ Agar kiritilgan foydalanuvchi ma'lumotlari (masalan, PINFL) orqali tizimda avval
     "statusText": "Bad Request"
 }
 ```
+
+---
+
+## 10. Mijoz profil ma'lumotlarini olish (Get Client Profile)
+
+Foydalanuvchi/mijozning shaxsiy profil ma'lumotlarini (ismi, PINFL, telefon raqami, jinsi, rasmi va yaratilgan vaqti) olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
+
+- **URL:** `/mobile/v1/get_client`
+- **Method:** `GET`
+- **Headers:** 
+  - `Authorization: Bearer <token>`
+  - `Content-Type: application/json`
+
+### So'rov (Request Body)
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `session_id` | `string` | Ha | Sessiya identifikatori. Masalan: `FTg7YNDE8eYTKLDNsqwms3MiNjwBPrGw` |
+| `code` | `string` | Ha | Tasdiqlash kodi. Masalan: `7883` |
+
+**Request namunasi (cURL):**
+```bash
+curl --location --request GET 'https://zal360.uz/endpoint/api/mobile/v1/get_client' --header 'Authorization: Bearer eyJra...' --header 'Content-Type: application/json' --data '{
+    "session_id": "FTg7YNDE8eYTKLDNsqwms3MiNjwBPrGw",
+    "code": "7883"
+}'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### 1. Muvaffaqiyatli javob (200 OK)
+Mijoz ma'lumotlari topilganda:
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-18T09:50:07.537+00:00",
+    "code": null,
+    "path": null,
+    "data": {
+        "name": "kimdir",
+        "pinfl": 12345678901234,
+        "mobile_phone": "9982342323",
+        "gender": "male",
+        "created_at": "2026-08-18T09:49:55.458+00:00",
+        "pic": "dfsdfsdfsd32ssdf"
+    },
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
+
+#### 2. Bo'sh javob (Mijoz topilmasa - 200 OK)
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-18T09:50:07.537+00:00",
+    "code": null,
+    "path": null,
+    "data": [],
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
