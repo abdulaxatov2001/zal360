@@ -210,3 +210,67 @@ Obuna so'rovi muvaffaqiyatli yaratilganda yangi yaratilgan yozuvning `id` si (`i
     "statusText": "OK"
 }
 ```
+
+---
+
+## 4. Mijozning obunalari va arizalari ro'yxatini olish (Get Client Subscriptions)
+
+Foydalanuvchi/mijozning barcha yuborgan obuna so'rovlari, arizalari va obunalari holatini (tashkilot, filial, tarif nomi va arizaning joriy statusi) olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
+
+- **URL:** `/mobile/v1/get/client_subscriptions`
+- **Method:** `GET`
+- **Headers:** 
+  - `Authorization: Bearer <token>`
+
+### So'rov (Request)
+`GET` so'rovi bo'lgani sababli `body` yo'q, faqat foydalanuvchi `Authorization: Bearer <token>` headeri talab qilinadi.
+
+**Request namunasi (cURL):**
+```bash
+curl --location 'https://zal360.uz/endpoint/api/mobile/v1/get/client_subscriptions' --header 'Authorization: Bearer eyJra...'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### 1. Muvaffaqiyatli javob (200 OK)
+Foydalanuvchining obunalari/arizalari ro'yxati mavjud bo'lganda:
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-19T07:43:29.411+00:00",
+    "code": null,
+    "path": null,
+    "data": [
+        {
+            "id": "684c277d-cf5c-4133-9d80-62197f3d6ffa",
+            "created_at": "2026-08-19T07:15:42.093+00:00",
+            "org_name": "Azizbek's GYM",
+            "branch_name": "bodomzor Bulls",
+            "subscription_name": "bronze",
+            "status": "moderatsiyada"
+        }
+    ],
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
+
+#### 2. Bo'sh javob (Obunalar mavjud bo'lmasa - 200 OK)
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-19T07:43:29.411+00:00",
+    "code": null,
+    "path": null,
+    "data": [],
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
