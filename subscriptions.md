@@ -302,26 +302,36 @@ curl --location 'https://zal360.uz/endpoint/api/mobile/v1/get/subscription_sched
 ### Javoblar (Responses)
 
 #### 1. Muvaffaqiyatli javob (200 OK)
-Obuna jadvallari mavjud bo'lganda:
+Obuna jadvallari (vaqt oralig'i, davomiyligi va narxi) mavjud bo'lganda:
 
 ```json
 {
     "error": null,
     "message": null,
-    "timestamp": "2026-08-25T03:24:49.000+00:00",
+    "timestamp": "2026-08-25T03:23:24.258+00:00",
     "code": null,
     "path": null,
     "data": [
         {
-            "id": "07e61722-bff1-49dd-88d9-9d102791088e",
-            "weekday": "Dushanba, Chorshanba, Juma",
-            "start_time": "08:00:00",
-            "end_time": "10:00:00"
+            "id": 6,
+            "start_time": "07:00:00",
+            "end_time": "10:00:00",
+            "duration_type": 1,
+            "duration_time": "02:00:00",
+            "price": 1500000.00
+        },
+        {
+            "id": 7,
+            "start_time": "10:00:00",
+            "end_time": "16:00:00",
+            "duration_type": 1,
+            "duration_time": "02:00:00",
+            "price": 1300000.00
         }
     ],
     "response": {},
-    "status": 200,
-    "statusText": "OK"
+    "statusText": "OK",
+    "status": 200
 }
 ```
 
