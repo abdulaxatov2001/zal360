@@ -349,3 +349,87 @@ Obuna jadvallari (vaqt oralig'i, davomiyligi va narxi) mavjud bo'lganda:
     "statusText": "OK"
 }
 ```
+
+---
+
+## 6. Filial tariflarini / obunalarini olish (Get Branch Subscriptions - v2)
+
+Filialga tegishli barcha tariflar (obunalar) ro'yxatini yangilangan v2 formati bo'yicha (jins turi, hafta kunlari, haftalik tashriflar soni va tashrif vaqti imkoniyatlari bilan birga) olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
+
+- **URL:** `/mobile/v2/get/branche_subscriptions`
+- **Method:** `GET`
+- **Headers:** 
+  - `Authorization: Bearer <token>`
+  - `Content-Type: application/json`
+
+### So'rov (Request Body)
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `branch_id` | `string` (UUID) | Ha | Tariflari olinayotgan filialning identifikatori |
+
+**Request namunasi (cURL):**
+```bash
+curl --location --request GET 'https://zal360.uz/endpoint/api/mobile/v2/get/branche_subscriptions' --header 'Authorization: Bearer eyJra...' --header 'Content-Type: application/json' --data '{
+  "branch_id": "7a5c35dd-98cc-41cf-a34f-db17cfa6190f"
+}'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### 1. Muvaffaqiyatli javob (200 OK)
+Filial tariflari mavjud bo'lganda (v2 formati):
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-25T03:25:49.537+00:00",
+    "code": null,
+    "path": null,
+    "data": [
+        {
+            "id": "f7785b0a-92cf-4516-bed6-174a19d30cea",
+            "name": "new1",
+            "start_time": "00:00:00",
+            "end_time": "00:00:00",
+            "service_type": "Фитнес",
+            "gender_type": "Умумий",
+            "week_days": "Барча кунлар",
+            "weekly_visits": 0,
+            "visit_can": "исталган пайт"
+        },
+        {
+            "id": "e85baaff-010b-4def-b132-7aa089d4b4a1",
+            "name": "new",
+            "start_time": "00:00:00",
+            "end_time": "00:00:00",
+            "service_type": "Фитнес",
+            "gender_type": "Умумий",
+            "week_days": "Душанба, Чоршанба, Жума",
+            "weekly_visits": 4,
+            "visit_can": "исталган пайт"
+        }
+    ],
+    "response": {},
+    "statusText": "OK",
+    "status": 200
+}
+```
+
+#### 2. Bo'sh javob (Tariflar topilmasa - 200 OK)
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-25T03:25:49.537+00:00",
+    "code": null,
+    "path": null,
+    "data": [],
+    "response": {},
+    "statusText": "OK",
+    "status": 200
+}
+```
