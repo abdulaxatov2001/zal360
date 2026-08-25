@@ -274,3 +274,68 @@ Foydalanuvchining obunalari/arizalari ro'yxati mavjud bo'lganda:
     "statusText": "OK"
 }
 ```
+
+---
+
+## 5. Obuna jadvallarini olish (Get Subscription Schedules)
+
+Tanlangan tarifga (obunaga) tegishli mashg'ulot kunlari va vaqt jadvallari ro'yxatini olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
+
+- **URL:** `/mobile/v1/get/subscription_schedules`
+- **Method:** `GET`
+- **Headers:** 
+  - `Authorization: Bearer <token>`
+
+### So'rov (Query Parameters)
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `subscription_id` | `string` (UUID) | Ha | Jadvallari olinayotgan obuna (tarif) identifikatori |
+
+**Request namunasi (cURL):**
+```bash
+curl --location 'https://zal360.uz/endpoint/api/mobile/v1/get/subscription_schedules?subscription_id=07e61722-bff1-49dd-88d9-9d102791088e' --header 'Authorization: Bearer eyJra...'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### 1. Muvaffaqiyatli javob (200 OK)
+Obuna jadvallari mavjud bo'lganda:
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-25T03:24:49.000+00:00",
+    "code": null,
+    "path": null,
+    "data": [
+        {
+            "id": "07e61722-bff1-49dd-88d9-9d102791088e",
+            "weekday": "Dushanba, Chorshanba, Juma",
+            "start_time": "08:00:00",
+            "end_time": "10:00:00"
+        }
+    ],
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
+
+#### 2. Bo'sh javob (Jadvallar mavjud bo'lmasa - 200 OK)
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-25T03:24:49.000+00:00",
+    "code": null,
+    "path": null,
+    "data": [],
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
