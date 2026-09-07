@@ -36,6 +36,34 @@
 
     <div class="sidebar-divider"></div>
 
+    <!-- Format o'lchami (Ixcham stend vs A4) -->
+    <div class="sidebar-section">
+      <label class="section-label">
+        <span class="label-icon">📐</span> Format o'lchami
+      </label>
+      <div class="format-toggle">
+        <button 
+          type="button" 
+          class="format-btn" 
+          :class="{ active: cardFormat === 'compact' }" 
+          @click="setFormat('compact')">
+          📇 Ixcham (10.5 sm)
+        </button>
+        <button 
+          type="button" 
+          class="format-btn" 
+          :class="{ active: cardFormat === 'a4' }" 
+          @click="setFormat('a4')">
+          📄 Katta A4
+        </button>
+      </div>
+      <div class="format-hint">
+        {{ cardFormat === 'compact' ? 'Stol usti stendi va resepshn uchun ixcham o\'lcham' : 'Devorga ilish uchun to\'liq A4 format' }}
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
     <!-- Dizayn tanlash -->
     <div class="sidebar-section">
       <label class="section-label">
@@ -105,15 +133,15 @@
 
   </aside>
 
-  <!-- ========== RIGHT: A4 POSTER PREVIEW ========== -->
+  <!-- ========== RIGHT: POSTER PREVIEW ========== -->
   <main class="qr-preview-area">
-    <div class="poster-sheet" :class="'design-theme-' + selectedDesign">
+    <div class="poster-sheet" :class="['design-theme-' + selectedDesign, 'format-' + cardFormat]">
 
       <!-- ===== DIZAYN 1: MODERN DARK GYM ===== -->
       <div v-if="selectedDesign === 1" class="poster-inner poster-dark">
         <div class="poster-header">
           <img src="https://zal360.uz/store/api/v1/file/docs/logo.jpg" alt="Logo" class="poster-logo" onerror="this.style.display='none'" />
-          <div class="brand-badge"><span class="dot-pulse"></span> ZAL360 • FITNESS CHECK-IN</div>
+          <div class="brand-badge"><span class="dot-pulse"></span> ZAL360 • CHECK-IN</div>
           <h1 class="branch-title">{{ currentBranch.branch_name || 'Sport Zali' }}</h1>
           <p class="org-sub">{{ currentBranch.org_name || 'Fitness &amp; GYM Club' }}</p>
           <div class="location-pill">📍 {{ currentBranch.address || 'Filial manzili' }}</div>
@@ -153,7 +181,7 @@
             <div class="qr-code-box" id="qr-target-2"></div>
           </div>
           <h3 class="scan-heading">KIRISH UCHUN SKANERLANG</h3>
-          <p class="scan-subtext">Mobil ilovadagi QR skaner orqali zalda identifikatsiyadan o'ting</p>
+          <p class="scan-subtext">Mobil ilovadagi QR skaner orqali identifikatsiyadan o'ting</p>
         </div>
         <div class="poster-footer">
           <div class="divider-line"></div>
@@ -215,8 +243,8 @@
               <h3>Tezkor Kirish:</h3>
               <ol>
                 <li>Zal360 mobil ilovasini oching</li>
-                <li>QR-skaner bo'limiga kiring</li>
-                <li>Ushbu kodni kamerangizga tuting</li>
+                <li>QR-skaner orqali kodni tuting</li>
+                <li>Zalda identifikatsiyadan o'ting</li>
               </ol>
             </div>
           </div>

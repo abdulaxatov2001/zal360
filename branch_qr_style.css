@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Filial QR Kod Chop Etish — Sidebar + Preview Layout
+   Filial QR Kod Chop Etish — Ixcham & Elegant Dizayn Stillari
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Cinzel:wght@600;700;800&display=swap');
@@ -33,12 +33,12 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 18px 16px 14px 16px;
+  padding: 16px 16px 12px 16px;
 }
 
 .brand-logo {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   object-fit: contain;
   border-radius: 8px;
   border: 1px solid #e2e8f0;
@@ -72,19 +72,19 @@
 
 /* Sections */
 .sidebar-section {
-  padding: 14px 16px;
+  padding: 12px 16px;
 }
 
 .section-label {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 700;
   color: #475569;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .label-icon {
@@ -98,10 +98,10 @@
 
 .styled-select {
   width: 100%;
-  padding: 9px 32px 9px 12px;
+  padding: 8px 30px 8px 10px;
   border-radius: 8px;
   border: 1.5px solid #e2e8f0;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 500;
   color: #0f172a;
   background: #f8fafc;
@@ -135,11 +135,11 @@
 }
 
 .address-hint {
-  margin-top: 7px;
-  font-size: 11px;
+  margin-top: 6px;
+  font-size: 10.5px;
   color: #64748b;
-  line-height: 1.4;
-  padding: 5px 8px;
+  line-height: 1.35;
+  padding: 4px 8px;
   background: #f8fafc;
   border-radius: 5px;
   border: 1px solid #f1f5f9;
@@ -152,18 +152,59 @@
   color: #d97706;
 }
 
+/* Format Toggle (Ixcham vs A4) */
+.format-toggle {
+  display: flex;
+  background: #f1f5f9;
+  padding: 3px;
+  border-radius: 8px;
+  gap: 3px;
+}
+
+.format-btn {
+  flex: 1;
+  padding: 7px 6px;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+}
+
+.format-btn:hover {
+  color: #0f172a;
+}
+
+.format-btn.active {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.format-hint {
+  font-size: 10.5px;
+  color: #64748b;
+  margin-top: 6px;
+  line-height: 1.35;
+}
+
 /* Design List */
 .design-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 .design-item {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 10px;
+  padding: 7px 10px;
   border-radius: 8px;
   border: 1.5px solid #e2e8f0;
   cursor: pointer;
@@ -183,8 +224,8 @@
 }
 
 .di-swatch {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border-radius: 6px;
   flex-shrink: 0;
 }
@@ -197,13 +238,13 @@
 }
 
 .di-name {
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 700;
   color: #0f172a;
 }
 
 .di-desc {
-  font-size: 10.5px;
+  font-size: 10px;
   color: #64748b;
 }
 
@@ -219,7 +260,7 @@
 }
 
 .sidebar-actions {
-  padding: 14px 16px 20px 16px;
+  padding: 12px 16px 16px 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -231,9 +272,9 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 10px 14px;
+  padding: 9px 12px;
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
   cursor: pointer;
   border: none;
@@ -274,22 +315,46 @@
   background: #f1f5f9;
 }
 
-/* A4 Poster Sheet */
+/* Poster Sheet Base */
 .poster-sheet {
-  width: 210mm;
-  min-height: 297mm;
   box-sizing: border-box;
   background: #ffffff;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
-  border-radius: 3px;
-  overflow: hidden;
   position: relative;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
+  margin: 0 auto;
+  transition: all 0.2s ease;
 }
 
-.poster-inner {
+/* --- FORMAT 1: IXCHAM STEND (STANDART) --- */
+.poster-sheet.format-compact {
+  width: 100%;
+  max-width: 380px;
+  min-height: auto;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+
+.poster-sheet.format-compact .poster-inner {
+  display: flex;
+  flex-direction: column;
+  padding: 22px 18px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+/* --- FORMAT 2: KATTA A4 POSTER --- */
+.poster-sheet.format-a4 {
+  width: 210mm;
+  min-height: 297mm;
+  border-radius: 4px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  overflow: hidden;
+}
+
+.poster-sheet.format-a4 .poster-inner {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -301,23 +366,23 @@
 
 /* Poster Logo */
 .poster-logo {
-  width: 54px;
-  height: 54px;
+  width: 46px;
+  height: 46px;
   object-fit: contain;
-  border-radius: 10px;
-  margin: 0 auto 12px auto;
+  border-radius: 8px;
+  margin: 0 auto 8px auto;
   display: block;
   background: rgba(255,255,255,0.08);
 }
 
 .poster-logo-sm {
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
 }
 
 .poster-logo-gold {
-  width: 52px;
-  height: 52px;
+  width: 46px;
+  height: 46px;
   border-radius: 8px;
   border: 1px solid rgba(212,175,55,0.3);
   background: rgba(0,0,0,0.15);
@@ -326,10 +391,10 @@
 /* QR Code Box */
 .qr-code-box {
   display: inline-flex;
-  padding: 10px;
+  padding: 8px;
   background: #ffffff;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 .qr-code-box img,
@@ -345,46 +410,46 @@
   background: linear-gradient(180deg, #090d16 0%, #0f172a 100%);
   color: #f1f5f9;
   font-family: 'Montserrat', sans-serif;
-  border: 2.5mm solid #10b981;
+  border: 2mm solid #10b981;
 }
 
 .poster-dark .brand-badge {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   background: rgba(16,185,129,0.12);
   color: #10b981;
   border: 1px solid rgba(16,185,129,0.4);
-  padding: 4px 14px;
+  padding: 3px 10px;
   border-radius: 50px;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 1.5px;
-  margin-bottom: 10px;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
 }
 
 .poster-dark .dot-pulse {
   display: inline-block;
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   background: #10b981;
-  box-shadow: 0 0 8px #10b981;
+  box-shadow: 0 0 6px #10b981;
 }
 
 .poster-dark .branch-title {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 800;
-  margin: 0 0 4px 0;
+  margin: 0 0 3px 0;
   color: #ffffff;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
 }
 
 .poster-dark .org-sub {
-  font-size: 12px;
+  font-size: 11px;
   color: #94a3b8;
-  margin: 0 0 8px 0;
+  margin: 0 0 6px 0;
   font-weight: 500;
 }
 
@@ -392,24 +457,24 @@
   display: inline-block;
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.08);
-  padding: 4px 12px;
+  padding: 3px 10px;
   border-radius: 4px;
-  font-size: 11px;
+  font-size: 10.5px;
   color: #cbd5e1;
 }
 
 .poster-dark .qr-glow-card {
   background: rgba(255,255,255,0.03);
   border: 1.5px dashed rgba(16,185,129,0.35);
-  border-radius: 14px;
-  padding: 16px 14px;
+  border-radius: 12px;
+  padding: 12px;
   display: inline-block;
-  margin: 18px auto;
+  margin: 12px auto;
 }
 
 .poster-dark .qr-scan-hint {
-  margin-top: 10px;
-  font-size: 12px;
+  margin-top: 8px;
+  font-size: 11px;
   color: #94a3b8;
   font-weight: 600;
 }
@@ -418,31 +483,31 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
+  gap: 6px;
+  margin-bottom: 8px;
 }
 
 .poster-dark .step {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 600;
   color: #cbd5e1;
 }
 
 .poster-dark .step-num {
   display: inline-block;
-  width: 16px;
-  height: 16px;
-  line-height: 16px;
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
   border-radius: 50%;
   background: #10b981;
   color: #0b0f19;
   font-weight: 800;
-  font-size: 9.5px;
-  margin-right: 3px;
+  font-size: 9px;
+  margin-right: 2px;
 }
 
-.poster-dark .step-arrow { color: #475569; font-size: 10px; }
-.poster-dark .branch-id-code { font-size: 10px; color: #64748b; font-family: monospace; letter-spacing: 0.5px; }
+.poster-dark .step-arrow { color: #475569; font-size: 9px; }
+.poster-dark .branch-id-code { font-size: 9.5px; color: #64748b; font-family: monospace; letter-spacing: 0.5px; }
 
 /* ==========================================================================
    DIZAYN 2: MINIMALIST WHITE
@@ -456,26 +521,26 @@
 
 .poster-white .clean-logo-mark {
   font-weight: 800;
-  font-size: 11px;
-  letter-spacing: 2px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
   color: #64748b;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
-.poster-white .branch-title { font-size: 22px; font-weight: 700; margin: 0 0 4px 0; color: #0f172a; }
-.poster-white .branch-address { font-size: 11.5px; color: #94a3b8; margin: 0; }
+.poster-white .branch-title { font-size: 18px; font-weight: 700; margin: 0 0 3px 0; color: #0f172a; }
+.poster-white .branch-address { font-size: 11px; color: #94a3b8; margin: 0; }
 
 .poster-white .minimal-qr-frame {
   position: relative;
   display: inline-block;
-  padding: 12px;
-  margin: 20px auto 14px auto;
+  padding: 10px;
+  margin: 12px auto 8px auto;
 }
 
 .poster-white .frame-corner {
   position: absolute;
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   border-color: #0f172a;
   border-style: solid;
 }
@@ -485,10 +550,10 @@
 .poster-white .frame-corner.bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
 .poster-white .frame-corner.br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
 
-.poster-white .scan-heading { font-size: 12.5px; font-weight: 700; letter-spacing: 1px; margin: 0 0 4px 0; color: #0f172a; }
-.poster-white .scan-subtext { font-size: 11px; color: #64748b; margin: 0; }
-.poster-white .divider-line { height: 1px; background: #e2e8f0; margin-bottom: 10px; }
-.poster-white .footer-meta { display: flex; justify-content: space-between; font-size: 10.5px; color: #94a3b8; font-weight: 500; }
+.poster-white .scan-heading { font-size: 11.5px; font-weight: 700; letter-spacing: 0.5px; margin: 0 0 3px 0; color: #0f172a; }
+.poster-white .scan-subtext { font-size: 10.5px; color: #64748b; margin: 0; }
+.poster-white .divider-line { height: 1px; background: #e2e8f0; margin-bottom: 8px; margin-top: 10px; }
+.poster-white .footer-meta { display: flex; justify-content: space-between; font-size: 10px; color: #94a3b8; font-weight: 500; }
 
 /* ==========================================================================
    DIZAYN 3: SPORT ENERGY RED
@@ -501,79 +566,123 @@
 }
 
 .poster-red .energy-stripe-top {
-  position: absolute; top: 0; left: 0; right: 0; height: 6mm;
+  position: absolute; top: 0; left: 0; right: 0; height: 4mm;
   background: linear-gradient(90deg, #dc2626 0%, #ef4444 60%, #f59e0b 100%);
 }
 
 .poster-red .energy-stripe-bottom {
-  position: absolute; bottom: 0; left: 0; right: 0; height: 4mm;
+  position: absolute; bottom: 0; left: 0; right: 0; height: 3mm;
   background: #dc2626;
 }
 
-.poster-red .energy-badge { font-weight: 800; font-size: 11px; color: #ef4444; letter-spacing: 2px; margin-bottom: 10px; }
-.poster-red .branch-title { font-size: 22px; font-weight: 800; margin: 0 0 6px 0; text-transform: uppercase; color: #ffffff; }
-.poster-red .branch-meta-bar { font-size: 11.5px; color: #a1a1aa; font-weight: 500; }
+.poster-red .energy-badge { font-weight: 800; font-size: 10px; color: #ef4444; letter-spacing: 1.5px; margin-bottom: 6px; }
+.poster-red .branch-title { font-size: 18px; font-weight: 800; margin: 0 0 4px 0; text-transform: uppercase; color: #ffffff; }
+.poster-red .branch-meta-bar { font-size: 11px; color: #a1a1aa; font-weight: 500; }
 
 .poster-red .red-qr-shield {
   background: #18181b;
   border: 1.5px solid #dc2626;
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: 10px;
+  padding: 12px;
   display: inline-block;
-  margin: 18px auto;
-  box-shadow: 0 4px 16px rgba(220,38,38,0.15);
+  margin: 12px auto;
+  box-shadow: 0 4px 14px rgba(220,38,38,0.15);
 }
 
-.poster-red .shield-header { font-size: 11px; font-weight: 800; color: #f59e0b; letter-spacing: 1.5px; margin-bottom: 10px; }
-.poster-red .shield-footer { font-size: 10.5px; font-weight: 700; color: #ef4444; letter-spacing: 1px; margin-top: 10px; }
+.poster-red .shield-header { font-size: 10px; font-weight: 800; color: #f59e0b; letter-spacing: 1px; margin-bottom: 6px; }
+.poster-red .shield-footer { font-size: 9.5px; font-weight: 700; color: #ef4444; letter-spacing: 0.5px; margin-top: 6px; }
 
 .poster-red .callout-box {
-  display: inline-flex; align-items: center; gap: 10px;
+  display: inline-flex; align-items: center; gap: 8px;
   background: rgba(220,38,38,0.08); border: 1px solid rgba(220,38,38,0.25);
-  padding: 6px 14px; border-radius: 6px; margin-bottom: 8px;
+  padding: 5px 12px; border-radius: 6px; margin-bottom: 6px;
 }
 
-.poster-red .callout-icon { font-size: 16px; }
+.poster-red .callout-icon { font-size: 14px; }
 .poster-red .callout-text { text-align: left; }
-.poster-red .callout-text strong { display: block; font-size: 11px; color: #fff; }
-.poster-red .callout-text small { font-size: 10px; color: #a1a1aa; }
-.poster-red .branch-id-code { font-size: 9.5px; color: #71717a; font-family: monospace; }
+.poster-red .callout-text strong { display: block; font-size: 10.5px; color: #fff; }
+.poster-red .callout-text small { font-size: 9.5px; color: #a1a1aa; }
+.poster-red .branch-id-code { font-size: 9px; color: #71717a; font-family: monospace; }
 
 /* ==========================================================================
-   DIZAYN 4: RECEPTION DESK STAND
+   DIZAYN 4: RECEPTION DESK STAND (IXCHAM VERTICAL FORMAT)
    ========================================================================== */
 .poster-desk {
   background: #f1f5f9;
   color: #0f172a;
-  border: 2mm solid #2563eb;
-  padding: 18mm 14mm;
+  border: 1.5mm solid #2563eb;
+  padding: 12px;
 }
 
 .poster-desk .desk-card-wrapper {
   background: #ffffff;
   border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  padding: 16px 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   border: 1px solid #e2e8f0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100%;
 }
 
-.poster-desk .desk-welcome { font-size: 10.5px; font-weight: 800; letter-spacing: 1.5px; color: #2563eb; margin-bottom: 4px; }
-.poster-desk .branch-title { font-size: 20px; font-weight: 800; margin: 0 0 4px 0; color: #0f172a; }
-.poster-desk .desk-address { font-size: 11.5px; color: #64748b; margin: 0; }
+.poster-desk .desk-welcome { font-size: 10px; font-weight: 800; letter-spacing: 1px; color: #2563eb; margin-bottom: 3px; }
+.poster-desk .branch-title { font-size: 17px; font-weight: 800; margin: 0 0 3px 0; color: #0f172a; }
+.poster-desk .desk-address { font-size: 11px; color: #64748b; margin: 0; }
 
 .poster-desk .desk-body {
-  display: flex; align-items: center; justify-content: center;
-  gap: 24px; margin: 20px 0; text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 10px 0;
+  text-align: center;
 }
 
-.poster-desk .desk-badge { display: inline-block; background: #dbeafe; color: #1e40af; font-size: 9.5px; font-weight: 700; padding: 2px 8px; border-radius: 3px; margin-bottom: 6px; }
-.poster-desk .desk-instructions h3 { font-size: 13.5px; font-weight: 700; margin: 0 0 6px 0; color: #0f172a; }
-.poster-desk .desk-instructions ol { margin: 0; padding-left: 18px; font-size: 11px; color: #475569; line-height: 1.6; }
-.poster-desk .desk-footer { border-top: 1px solid #f1f5f9; padding-top: 10px; display: flex; justify-content: space-between; font-size: 10px; color: #94a3b8; }
+.poster-desk .desk-badge {
+  display: inline-block;
+  background: #dbeafe;
+  color: #1e40af;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 3px;
+  margin-bottom: 5px;
+}
+
+.poster-desk .desk-instructions {
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 6px;
+  padding: 8px 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.poster-desk .desk-instructions h3 {
+  font-size: 11.5px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  color: #0f172a;
+  text-align: left;
+}
+
+.poster-desk .desk-instructions ol {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 10.5px;
+  color: #475569;
+  line-height: 1.45;
+  text-align: left;
+}
+
+.poster-desk .desk-footer {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 6px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 9.5px;
+  color: #94a3b8;
+}
 
 /* ==========================================================================
    DIZAYN 5: GOLD LUXURY CLUB
@@ -584,31 +693,42 @@
   font-family: 'Cinzel', 'Playfair Display', serif;
 }
 
-.poster-gold .gold-border-outer { border: 1.5px solid #d4af37; padding: 8px; height: 100%; box-sizing: border-box; }
+.poster-gold .gold-border-outer {
+  border: 1.5px solid #d4af37;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
 .poster-gold .gold-border-inner {
   border: 1px solid rgba(212,175,55,0.35);
-  padding: 20px 16px; height: 100%; box-sizing: border-box;
-  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 16px 14px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.poster-gold .gold-emblem { font-family: 'Inter', sans-serif; font-size: 10px; letter-spacing: 3px; color: #d4af37; margin-bottom: 10px; }
-.poster-gold .branch-title { font-size: 22px; font-weight: 700; margin: 0 0 4px 0; color: #ffffff; letter-spacing: 0.5px; }
-.poster-gold .gold-divider { color: #d4af37; font-size: 9px; letter-spacing: 4px; margin: 6px 0; }
-.poster-gold .gold-address { font-family: 'Inter', sans-serif; font-size: 11px; color: #a8a29e; margin: 0; }
+.poster-gold .gold-emblem { font-family: 'Inter', sans-serif; font-size: 9.5px; letter-spacing: 2px; color: #d4af37; margin-bottom: 6px; }
+.poster-gold .branch-title { font-size: 18px; font-weight: 700; margin: 0 0 3px 0; color: #ffffff; letter-spacing: 0.5px; }
+.poster-gold .gold-divider { color: #d4af37; font-size: 8px; letter-spacing: 3px; margin: 4px 0; }
+.poster-gold .gold-address { font-family: 'Inter', sans-serif; font-size: 10.5px; color: #a8a29e; margin: 0; }
 
 .poster-gold .gold-qr-wrapper {
-  background: #ffffff; padding: 12px; border-radius: 6px;
-  display: inline-block; border: 2px solid #d4af37;
-  box-shadow: 0 0 20px rgba(212,175,55,0.15);
-  margin: 18px auto 10px auto;
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 6px;
+  display: inline-block;
+  border: 2px solid #d4af37;
+  box-shadow: 0 0 16px rgba(212,175,55,0.15);
+  margin: 12px auto 8px auto;
 }
 
-.poster-gold .gold-scan-title { font-family: 'Inter', sans-serif; font-size: 11.5px; font-weight: 700; letter-spacing: 1.5px; color: #d4af37; margin: 0 0 4px 0; }
-.poster-gold .gold-scan-desc { font-family: 'Inter', sans-serif; font-size: 11px; color: #a8a29e; margin: 0; }
-.poster-gold .gold-sub-footer { font-family: 'Inter', sans-serif; border-top: 1px solid rgba(212,175,55,0.25); padding-top: 10px; display: flex; justify-content: space-between; font-size: 10px; color: #78716c; }
+.poster-gold .gold-scan-title { font-family: 'Inter', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #d4af37; margin: 0 0 3px 0; }
+.poster-gold .gold-scan-desc { font-family: 'Inter', sans-serif; font-size: 10px; color: #a8a29e; margin: 0; }
+.poster-gold .gold-sub-footer { font-family: 'Inter', sans-serif; border-top: 1px solid rgba(212,175,55,0.25); padding-top: 8px; margin-top: 8px; display: flex; justify-content: space-between; font-size: 9.5px; color: #78716c; }
 
 /* ==========================================================================
-   PRINT STYLES
+   CHOP ETISH (@media print) QOIDALARI — IXCHAM VA MARKAZLASHGAN
    ========================================================================== */
 @media print {
   .no-print,
@@ -635,14 +755,28 @@
   }
 
   .qr-preview-area {
-    display: block !important;
-    padding: 0 !important;
-    margin: 0 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    padding: 20mm 0 0 0 !important;
+    margin: 0 auto !important;
     background: none !important;
     overflow: visible !important;
   }
 
-  .poster-sheet {
+  /* Ixcham formatda chop etish: Qog'oz markazida ixcham 105mm (stend) o'lchamda chiqadi */
+  .poster-sheet.format-compact {
+    box-shadow: none !important;
+    border-radius: 10px !important;
+    width: 105mm !important;
+    max-width: 105mm !important;
+    margin: 15mm auto !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* A4 formatda chop etish */
+  .poster-sheet.format-a4 {
     box-shadow: none !important;
     border-radius: 0 !important;
     width: 100% !important;
@@ -656,5 +790,3 @@
     margin: 0;
   }
 }
-
-

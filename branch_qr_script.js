@@ -4,7 +4,9 @@
       // Filial ID tanlovi
       selectedBranchId: "",
       // 5 xil dizayndan 1-si (Modern Dark) dastlab tanlangan
-      selectedDesign: 1
+      selectedDesign: 1,
+      // Format o'lchami: 'compact' (10.5 sm ixcham stend) yoki 'a4' (katta poster)
+      cardFormat: 'compact'
     };
   },
 
@@ -60,6 +62,14 @@
   },
 
   methods: {
+    // Format tanlash ('compact' yoki 'a4')
+    setFormat(format) {
+      this.cardFormat = format;
+      this.$nextTick(() => {
+        this.renderQRCode();
+      });
+    },
+
     // Dizayn tanlash (1 dan 5 gacha)
     selectDesign(designId) {
       this.selectedDesign = designId;
@@ -104,7 +114,7 @@
       }
     },
 
-    // Tanlangan dizaynga mos QR kodni chizish (Ixcham va aniq)
+    // Tanlangan dizaynga mos QR kodni chizish
     renderQRCode() {
       const targetId = 'qr-target-' + this.selectedDesign;
       const container = document.getElementById(targetId);
@@ -130,26 +140,45 @@
         return;
       }
 
-      // Shrift va dizaynga mos ixcham o'lchamlar (175px - 195px)
+      // Shrift va dizaynga mos o'lchamlar (Ixcham formatda 165px - 175px, A4 da 200px - 220px)
       let darkColor = "#0f172a";
       let lightColor = "#ffffff";
-      let qrSize = 190;
+      let qrSize = this.cardFormat === 'compact' ? 170 : 210;
 
-      if (this.selectedDesign === 1) {
-        darkColor = "#090d16";
-        qrSize = 195;
-      } else if (this.selectedDesign === 2) {
-        darkColor = "#000000";
-        qrSize = 190;
-      } else if (this.selectedDesign === 3) {
-        darkColor = "#09090b";
-        qrSize = 190;
-      } else if (this.selectedDesign === 4) {
-        darkColor = "#0f172a";
-        qrSize = 175;
-      } else if (this.selectedDesign === 5) {
-        darkColor = "#0a0a0a";
-        qrSize = 185;
+      if (this.cardFormat === 'compact') {
+        if (this.selectedDesign === 1) {
+          darkColor = "#090d16";
+          qrSize = 175;
+        } else if (this.selectedDesign === 2) {
+          darkColor = "#000000";
+          qrSize = 170;
+        } else if (this.selectedDesign === 3) {
+          darkColor = "#09090b";
+          qrSize = 170;
+        } else if (this.selectedDesign === 4) {
+          darkColor = "#0f172a";
+          qrSize = 165;
+        } else if (this.selectedDesign === 5) {
+          darkColor = "#0a0a0a";
+          qrSize = 170;
+        }
+      } else {
+        if (this.selectedDesign === 1) {
+          darkColor = "#090d16";
+          qrSize = 220;
+        } else if (this.selectedDesign === 2) {
+          darkColor = "#000000";
+          qrSize = 210;
+        } else if (this.selectedDesign === 3) {
+          darkColor = "#09090b";
+          qrSize = 210;
+        } else if (this.selectedDesign === 4) {
+          darkColor = "#0f172a";
+          qrSize = 195;
+        } else if (this.selectedDesign === 5) {
+          darkColor = "#0a0a0a";
+          qrSize = 210;
+        }
       }
 
       try {
