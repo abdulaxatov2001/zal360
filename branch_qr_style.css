@@ -391,16 +391,24 @@
 /* QR Code Box */
 .qr-code-box {
   display: inline-flex;
+  justify-content: center;
+  align-items: center;
   padding: 8px;
   background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
-.qr-code-box img,
+/* Faqat bitta QR kod ko'rinishi shart - qrcode.js yaratgan canvas yashiriladi, faqat img chiqadi */
 .qr-code-box canvas {
+  display: none !important;
+}
+
+.qr-code-box img {
   display: block !important;
   max-width: 100%;
+  height: auto;
+  margin: 0 auto;
 }
 
 /* ==========================================================================

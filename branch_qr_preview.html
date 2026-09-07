@@ -398,16 +398,24 @@
 /* QR Code Box */
 .qr-code-box {
   display: inline-flex;
+  justify-content: center;
+  align-items: center;
   padding: 8px;
   background: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
-.qr-code-box img,
+/* Faqat bitta QR kod ko'rinishi shart - qrcode.js yaratgan canvas yashiriladi, faqat img chiqadi */
 .qr-code-box canvas {
+  display: none !important;
+}
+
+.qr-code-box img {
   display: block !important;
   max-width: 100%;
+  height: auto;
+  margin: 0 auto;
 }
 
 /* ==========================================================================
@@ -1290,6 +1298,16 @@
           colorLight: lightColor,
           correctLevel: QRCode.CorrectLevel.H
         });
+
+        // Yonma-yon 2 ta bo'lib qolmasligi uchun: qrcode.js canvas elementini yashirib, faqat bitta img qoldiramiz
+        this.$nextTick(() => {
+          const canvas = container.querySelector('canvas');
+          const img = container.querySelector('img');
+          if (canvas && img) {
+            canvas.style.display = 'none';
+            img.style.display = 'block';
+          }
+        });
       } catch (err) {
         console.error("QR Code generatsiyasida xatolik:", err);
       }
@@ -1338,16 +1356,16 @@
       d.pageData = {
         branches: [
           {
-            id: '019d5f91-f059-4447-a610-10329e1d030e',
-            branch_name: 'Bodomzor Bulls Center',
-            org_id: '1568b982-76f9-44b4-badc-fd5cc1af0ed7',
-            address: 'Toshkent sh., Yunusobod tumani, Bodomzor metro yaqinida'
-          },
-          {
             id: '7a5c35dd-98cc-41cf-a34f-db17cfa6190f',
             branch_name: 'Bektemir Bulls GYM',
             org_id: '1568b982-76f9-44b4-badc-fd5cc1af0ed7',
             address: 'Toshkent sh., Bektemir tumani, Rohat aylanmasi 14'
+          },
+          {
+            id: '019d5f91-f059-4447-a610-10329e1d030e',
+            branch_name: 'Bodomzor Bulls Center',
+            org_id: '1568b982-76f9-44b4-badc-fd5cc1af0ed7',
+            address: 'Toshkent sh., Yunusobod tumani, Bodomzor metro yaqinida'
           },
           {
             id: 'c6cfd8b2-4f7c-4eab-ae1e-b476ae59ef8c',

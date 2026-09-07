@@ -190,6 +190,16 @@
           colorLight: lightColor,
           correctLevel: QRCode.CorrectLevel.H
         });
+
+        // Yonma-yon 2 ta bo'lib qolmasligi uchun: qrcode.js canvas elementini yashirib, faqat bitta img qoldiramiz
+        this.$nextTick(() => {
+          const canvas = container.querySelector('canvas');
+          const img = container.querySelector('img');
+          if (canvas && img) {
+            canvas.style.display = 'none';
+            img.style.display = 'block';
+          }
+        });
       } catch (err) {
         console.error("QR Code generatsiyasida xatolik:", err);
       }
