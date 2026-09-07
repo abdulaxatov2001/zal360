@@ -1,0 +1,261 @@
+<div class="qr-app">
+
+  <!-- ========== LEFT SIDEBAR (only on screen) ========== -->
+  <aside class="qr-sidebar no-print">
+
+    <!-- Logo + Brand -->
+    <div class="sidebar-brand">
+      <img src="https://zal360.uz/store/api/v1/file/docs/logo.jpg" alt="Zal360 Logo" class="brand-logo" onerror="this.style.display='none'" />
+      <div class="brand-text">
+        <span class="brand-name">Zal360</span>
+        <span class="brand-sub">QR Chop Etish</span>
+      </div>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <!-- Filial tanlash -->
+    <div class="sidebar-section">
+      <label class="section-label">
+        <span class="label-icon">🏢</span> Filialni tanlang
+      </label>
+      <div class="select-wrapper">
+        <select v-model="selectedBranchId" @change="handleBranchChange" class="styled-select">
+          <option value="" disabled>— Filialni tanlang —</option>
+          <option v-for="branch in branches" :key="branch.id" :value="branch.id">
+            {{ branch.branch_name || branch.name }}
+          </option>
+        </select>
+        <span class="select-chevron">▾</span>
+      </div>
+      <div v-if="currentBranch && currentBranch.address" class="address-hint">
+        📍 {{ currentBranch.address }}
+      </div>
+      <small v-if="branches.length === 0" class="no-data-hint">Filiallar yuklanmoqda...</small>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <!-- Dizayn tanlash -->
+    <div class="sidebar-section">
+      <label class="section-label">
+        <span class="label-icon">🎨</span> Dizaynni tanlang
+      </label>
+      <div class="design-list">
+
+        <div class="design-item" :class="{ active: selectedDesign === 1 }" @click="selectDesign(1)">
+          <div class="di-swatch" style="background: linear-gradient(135deg,#090d16,#10b981);"></div>
+          <div class="di-info">
+            <span class="di-name">1. Modern Dark</span>
+            <span class="di-desc">Neon yashil • To'q</span>
+          </div>
+          <svg v-if="selectedDesign === 1" class="di-check" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="6" fill="#2563eb"/><path d="M3 6l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+
+        <div class="design-item" :class="{ active: selectedDesign === 2 }" @click="selectDesign(2)">
+          <div class="di-swatch" style="background:#f8fafc; border:1px solid #cbd5e1;"></div>
+          <div class="di-info">
+            <span class="di-name">2. Minimalist</span>
+            <span class="di-desc">Oq • Toza</span>
+          </div>
+          <svg v-if="selectedDesign === 2" class="di-check" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="6" fill="#2563eb"/><path d="M3 6l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+
+        <div class="design-item" :class="{ active: selectedDesign === 3 }" @click="selectDesign(3)">
+          <div class="di-swatch" style="background: linear-gradient(135deg,#09090b,#dc2626);"></div>
+          <div class="di-info">
+            <span class="di-name">3. Sport Energy</span>
+            <span class="di-desc">Qizil • Dinamik</span>
+          </div>
+          <svg v-if="selectedDesign === 3" class="di-check" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="6" fill="#2563eb"/><path d="M3 6l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+
+        <div class="design-item" :class="{ active: selectedDesign === 4 }" @click="selectDesign(4)">
+          <div class="di-swatch" style="background: linear-gradient(135deg,#dbeafe,#2563eb);"></div>
+          <div class="di-info">
+            <span class="di-name">4. Reception Stand</span>
+            <span class="di-desc">Ko'k • Stol stendi</span>
+          </div>
+          <svg v-if="selectedDesign === 4" class="di-check" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="6" fill="#2563eb"/><path d="M3 6l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+
+        <div class="design-item" :class="{ active: selectedDesign === 5 }" @click="selectDesign(5)">
+          <div class="di-swatch" style="background: linear-gradient(135deg,#0a0a0a,#d4af37);"></div>
+          <div class="di-info">
+            <span class="di-name">5. Gold Luxury</span>
+            <span class="di-desc">Tilla • VIP</span>
+          </div>
+          <svg v-if="selectedDesign === 5" class="di-check" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="6" fill="#2563eb"/><path d="M3 6l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="sidebar-spacer"></div>
+
+    <!-- Amallar -->
+    <div class="sidebar-actions">
+      <button class="action-btn btn-print" @click="printPoster">
+        🖨️ &nbsp;Chop etish
+      </button>
+      <button class="action-btn btn-download" @click="downloadQR">
+        📥 &nbsp;PNG yuklab olish
+      </button>
+    </div>
+
+  </aside>
+
+  <!-- ========== RIGHT: A4 POSTER PREVIEW ========== -->
+  <main class="qr-preview-area">
+    <div class="poster-sheet" :class="'design-theme-' + selectedDesign">
+
+      <!-- ===== DIZAYN 1: MODERN DARK GYM ===== -->
+      <div v-if="selectedDesign === 1" class="poster-inner poster-dark">
+        <div class="poster-header">
+          <img src="https://zal360.uz/store/api/v1/file/docs/logo.jpg" alt="Logo" class="poster-logo" onerror="this.style.display='none'" />
+          <div class="brand-badge"><span class="dot-pulse"></span> ZAL360 • FITNESS CHECK-IN</div>
+          <h1 class="branch-title">{{ currentBranch.branch_name || 'Sport Zali' }}</h1>
+          <p class="org-sub">{{ currentBranch.org_name || 'Fitness &amp; GYM Club' }}</p>
+          <div class="location-pill">📍 {{ currentBranch.address || 'Filial manzili' }}</div>
+        </div>
+        <div class="poster-body">
+          <div class="qr-glow-card">
+            <div class="qr-code-box" id="qr-target-1"></div>
+            <div class="qr-scan-hint">📲 Mobil ilovada QR kodni skanerlang</div>
+          </div>
+        </div>
+        <div class="poster-footer">
+          <div class="instruction-steps">
+            <div class="step"><span class="step-num">1</span> Ilovani oching</div>
+            <div class="step-arrow">➜</div>
+            <div class="step"><span class="step-num">2</span> Skanerlang</div>
+            <div class="step-arrow">➜</div>
+            <div class="step"><span class="step-num">3</span> Zalga kiring</div>
+          </div>
+          <div class="branch-id-code">FILIAL ID: {{ currentBranch.id }}</div>
+        </div>
+      </div>
+
+      <!-- ===== DIZAYN 2: MINIMALIST WHITE ===== -->
+      <div v-if="selectedDesign === 2" class="poster-inner poster-white">
+        <div class="poster-header">
+          <img src="https://zal360.uz/store/api/v1/file/docs/logo.jpg" alt="Logo" class="poster-logo poster-logo-sm" onerror="this.style.display='none'" />
+          <div class="clean-logo-mark">ZAL360 CHECK-IN POINT</div>
+          <h1 class="branch-title">{{ currentBranch.branch_name || 'Sport Zali' }}</h1>
+          <p class="branch-address">{{ currentBranch.address || 'Filial manzili' }}</p>
+        </div>
+        <div class="poster-body">
+          <div class="minimal-qr-frame">
+            <div class="frame-corner tl"></div>
+            <div class="frame-corner tr"></div>
+            <div class="frame-corner bl"></div>
+            <div class="frame-corner br"></div>
+            <div class="qr-code-box" id="qr-target-2"></div>
+          </div>
+          <h3 class="scan-heading">KIRISH UCHUN SKANERLANG</h3>
+          <p class="scan-subtext">Mobil ilovadagi QR skaner orqali zalda identifikatsiyadan o'ting</p>
+        </div>
+        <div class="poster-footer">
+          <div class="divider-line"></div>
+          <div class="footer-meta">
+            <span>{{ currentBranch.org_name || 'Zal360' }}</span>
+            <span class="id-tag">ID: {{ currentBranch.id }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DIZAYN 3: SPORT ENERGY RED ===== -->
+      <div v-if="selectedDesign === 3" class="poster-inner poster-red">
+        <div class="energy-stripe-top"></div>
+        <div class="poster-header">
+          <img src="https://zal360.uz/store/api/v1/file/docs/logo.jpg" alt="Logo" class="poster-logo" onerror="this.style.display='none'" />
+          <div class="energy-badge">⚡ WORKOUT CHECK-IN</div>
+          <h1 class="branch-title">{{ currentBranch.branch_name || 'SPORT ZALI' }}</h1>
+          <div class="branch-meta-bar">
+            <span>{{ currentBranch.org_name || 'ZAL360' }}</span> • <span>{{ currentBranch.address || 'Filial' }}</span>
+          </div>
+        </div>
+        <div class="poster-body">
+          <div class="red-qr-shield">
+            <div class="shield-header">KIRISH NUQTASI</div>
+            <div class="shield-qr-box">
+              <div class="qr-code-box" id="qr-target-3"></div>
+            </div>
+            <div class="shield-footer">SKANER QILISH UCHUN</div>
+          </div>
+        </div>
+        <div class="poster-footer">
+          <div class="callout-box">
+            <span class="callout-icon">🏋️‍♂️</span>
+            <div class="callout-text">
+              <strong>Zalga xush kelibsiz!</strong>
+              <small>Ilovangizdagi skaner orqali tizimga kiring</small>
+            </div>
+          </div>
+          <div class="branch-id-code">ID: {{ currentBranch.id }}</div>
+        </div>
+        <div class="energy-stripe-bottom"></div>
+      </div>
+
+      <!-- ===== DIZAYN 4: RECEPTION DESK STAND ===== -->
+      <div v-if="selectedDesign === 4" class="poster-inner poster-desk">
+        <div class="desk-card-wrapper">
+          <div class="desk-header">
+            <img src="https://zal360.uz/store/api/v1/file/docs/logo.jpg" alt="Logo" class="poster-logo poster-logo-sm" onerror="this.style.display='none'" />
+            <div class="desk-welcome">RESEPSHN • WELCOME</div>
+            <h2 class="branch-title">{{ currentBranch.branch_name || 'Sport Zali' }}</h2>
+            <p class="desk-address">📍 {{ currentBranch.address || 'Filial manzili' }}</p>
+          </div>
+          <div class="desk-body">
+            <div class="desk-qr-container">
+              <div class="qr-code-box" id="qr-target-4"></div>
+            </div>
+            <div class="desk-instructions">
+              <div class="desk-badge">STOL USTIDA SKANERLASH UCHUN</div>
+              <h3>Tezkor Kirish:</h3>
+              <ol>
+                <li>Zal360 mobil ilovasini oching</li>
+                <li>QR-skaner bo'limiga kiring</li>
+                <li>Ushbu kodni kamerangizga tuting</li>
+              </ol>
+            </div>
+          </div>
+          <div class="desk-footer">
+            <div class="desk-support">Savollar bo'lsa resepshn ma'muriga murojaat qiling</div>
+            <div class="desk-id">ID: {{ currentBranch.id }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== DIZAYN 5: GOLD LUXURY CLUB ===== -->
+      <div v-if="selectedDesign === 5" class="poster-inner poster-gold">
+        <div class="gold-border-outer">
+          <div class="gold-border-inner">
+            <div class="poster-header">
+              <img src="https://zal360.uz/store/api/v1/file/docs/logo.jpg" alt="Logo" class="poster-logo poster-logo-gold" onerror="this.style.display='none'" />
+              <div class="gold-emblem">✦ EXCLUSIVE ACCESS ✦</div>
+              <h1 class="branch-title">{{ currentBranch.branch_name || 'Luxury Gym' }}</h1>
+              <div class="gold-divider">♦ ♦ ♦</div>
+              <p class="gold-address">{{ currentBranch.address || 'Premium Club' }}</p>
+            </div>
+            <div class="poster-body">
+              <div class="gold-qr-wrapper">
+                <div class="qr-code-box" id="qr-target-5"></div>
+              </div>
+              <p class="gold-scan-title">VIP MEMBER CHECK-IN</p>
+              <p class="gold-scan-desc">Ilova orqali QR kodni skaner qilib zalga kiring</p>
+            </div>
+            <div class="poster-footer">
+              <div class="gold-sub-footer">
+                <span>{{ currentBranch.org_name || 'Zal360 Platinum' }}</span>
+                <span class="gold-id">ID: {{ currentBranch.id }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div>

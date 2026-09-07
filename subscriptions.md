@@ -186,7 +186,7 @@ Filial tariflari mavjud bo'lganda (v2 formati):
 
 ## 3. Tarif tanlab obuna so'rovini yuborish (Create Client Subscription Request)
 
-Mijoz tanlagan sport zali filiali va tarifi (obunasi) bo'yicha obuna so'rovini yaratish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
+Mijoz tanlagan sport zali filiali, tarifi (obunasi), jadvali, boshlanish sanasi va vaqti bo'yicha obuna so'rovini yaratish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
 
 - **URL:** `/mobile/v1/post/client_subscriptions`
 - **Method:** `POST`
@@ -201,13 +201,24 @@ Mijoz tanlagan sport zali filiali va tarifi (obunasi) bo'yicha obuna so'rovini y
 | `org_id` | `string` (UUID) | Ha | Tashkilot identifikatori |
 | `branch_id` | `string` (UUID) | Ha | Filial identifikatori |
 | `subscription_id` | `string` (UUID) | Ha | Tanlangan tarif (obuna) identifikatori |
+| `subscription_schedules_id` | `integer` | Ha | Tanlangan obuna jadvali identifikatori |
+| `start_time` | `string` (Time) | Ha | Tanlangan mashg'ulot boshlanish vaqti (`HH:mm:ss`) |
+| `bdate` | `string` (Date) | Ha | Obunaning boshlanish sanasi (`YYYY-MM-DD`) |
+| `week_days` | `string` | Ha | Tanlangan hafta kunlari (masalan, `"{'1','2','3'}"`) |
 
 **Request namunasi (cURL):**
 ```bash
-curl --location 'https://zal360.uz/endpoint/api/mobile/v1/post/client_subscriptions' --header 'Authorization: Bearer eyJra...' --header 'Content-Type: application/json' --data '{
-  "org_id": "9148a242-7de9-4ac2-9d2f-9427aed3742c",
-  "branch_id": "c6cfd8b2-4f7c-4eab-ae1e-b476ae59ef8c",
-  "subscription_id": "66f10d0a-caab-4549-8106-7f14bd811ba3"
+curl --location 'https://zal360.uz/endpoint/api/mobile/v1/post/client_subscriptions' \
+--header 'Authorization: Bearer eyJra...' \
+--header 'Content-Type: application/json' \
+--data '{
+  "org_id": "1568b982-76f9-44b4-badc-fd5cc1af0ed7",
+  "branch_id": "019d5f91-f059-4447-a610-10329e1d030e",
+  "subscription_id": "d9646b1f-f9b3-4b9f-8613-3ee1699be6e0",
+  "subscription_schedules_id": 30,
+  "start_time": "19:00:00",
+  "bdate": "2026-09-01",
+  "week_days": "{'\''1'\'','\''2'\'','\''3'\''}"
 }'
 ```
 
