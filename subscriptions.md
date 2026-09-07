@@ -80,11 +80,11 @@ Filiallar ro'yxati mavjud bo'lganda quyidagi formatda to'liq ma'lumotlar massivi
 
 ---
 
-## 2. Filial tariflarini / obunalarini olish (Get Branch Subscriptions)
+## 2. Filial tariflarini / obunalarini olish (Get Branch Subscriptions - v2)
 
-Tanlangan filialga tegishli barcha tariflar (obunalar) ro'yxatini (nomi, vaqti, xizmat turi va narxi) olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
+Filialga tegishli barcha tariflar (obunalar) ro'yxatini yangilangan v2 formati bo'yicha (xizmat turi, jins turi, hafta kunlari, haftalik tashriflar soni, tashrif vaqti, vizual holati, boshlanish/tugash vaqtlari va qo'shimcha qulayliklar bilan birga) olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
 
-- **URL:** `/mobile/v1/get/branche_subscriptions`
+- **URL:** `/mobile/v2/get/branche_subscriptions`
 - **Method:** `GET`
 - **Headers:** 
   - `Authorization: Bearer <token>`
@@ -98,7 +98,7 @@ Tanlangan filialga tegishli barcha tariflar (obunalar) ro'yxatini (nomi, vaqti, 
 
 **Request namunasi (cURL):**
 ```bash
-curl --location --request GET 'https://zal360.uz/endpoint/api/mobile/v1/get/branche_subscriptions' --header 'Authorization: Bearer eyJra...' --header 'Content-Type: application/json' --data '{
+curl --location --request GET 'https://zal360.uz/endpoint/api/mobile/v2/get/branche_subscriptions' --header 'Authorization: Bearer eyJra...' --header 'Content-Type: application/json' --data '{
   "branch_id": "7a5c35dd-98cc-41cf-a34f-db17cfa6190f"
 }'
 ```
@@ -108,51 +108,77 @@ curl --location --request GET 'https://zal360.uz/endpoint/api/mobile/v1/get/bran
 ### Javoblar (Responses)
 
 #### 1. Muvaffaqiyatli javob (200 OK)
-Filial tariflari mavjud bo'lganda quyidagi formatda massiv qaytadi:
+Filial tariflari mavjud bo'lganda (v2 formati):
 
 ```json
 {
     "error": null,
     "message": null,
-    "timestamp": "2026-08-18T09:22:18.563+00:00",
+    "timestamp": "2026-09-07T08:32:32.713+00:00",
     "code": null,
     "path": null,
     "data": [
         {
-            "id": "66f10d0a-caab-4549-8106-7f14bd811ba3",
-            "name": "bronze",
-            "start_time": "08:00:00",
-            "end_time": "22:00:00",
+            "id": "1e4f1b2f-467f-4f9e-ade7-c57801b2865d",
+            "name": "bronza",
             "service_type": "Фитнес",
-            "price": 300000.00
+            "gender_type": "Умумий",
+            "week_days": "Барча кунлар",
+            "weekly_visits": 3,
+            "visit_can": "исталган пайт",
+            "visual_state": "актив",
+            "add_options_text": "сауна, бассейн, парковка",
+            "start_time": "07:00:00",
+            "end_time": "23:00:00"
         },
         {
-            "id": "e7ae0a4c-75da-4bbf-a1d9-53d402fdf3c6",
-            "name": "gold",
-            "start_time": "00:00:00",
-            "end_time": "00:00:00",
-            "service_type": "Бокс",
-            "price": 1000000.00
+            "id": "d9646b1f-f9b3-4b9f-8613-3ee1699be6e0",
+            "name": "silver",
+            "service_type": "Фитнес",
+            "gender_type": "Умумий",
+            "week_days": "Душанба, Чоршанба, Жума, Якшанба",
+            "weekly_visits": 4,
+            "visit_can": "исталган пайт",
+            "visual_state": "актив",
+            "add_options_text": "сауна",
+            "start_time": "07:00:00",
+            "end_time": "00:00:00"
         }
     ],
     "response": {},
-    "status": 200,
-    "statusText": "OK"
+    "statusText": "OK",
+    "status": 200
 }
 ```
+
+**Javob maydonlari (Response Data Fields):**
+
+| Maydon | Turi | Izoh |
+| :--- | :--- | :--- |
+| `id` | `string` (UUID) | Tarif (obuna) identifikatori |
+| `name` | `string` | Tarif nomi (masalan, `bronza`, `silver`) |
+| `service_type` | `string` | Xizmat turi (masalan, `Фитнес`) |
+| `gender_type` | `string` | Mo'ljallangan jins turi (`Умумий`, `Эркак`, `Аёл`) |
+| `week_days` | `string` | Haftadagi qatnash kunlari |
+| `weekly_visits` | `integer` | Bir haftadagi tashriflar soni |
+| `visit_can` | `string` | Tashrif vaqti imkoniyati (`исталган пайт`) |
+| `visual_state` | `string` | Vizual holati (`актив`) |
+| `add_options_text` | `string` | Qo'shimcha qulayliklar/xizmatlar (`сауна, бассейн, парковка`) |
+| `start_time` | `string` (Time) | Boshlanish vaqti (`HH:mm:ss`) |
+| `end_time` | `string` (Time) | Tugash vaqti (`HH:mm:ss`) |
 
 #### 2. Bo'sh javob (Tariflar topilmasa - 200 OK)
 ```json
 {
     "error": null,
     "message": null,
-    "timestamp": "2026-08-18T09:22:18.563+00:00",
+    "timestamp": "2026-09-07T08:32:32.713+00:00",
     "code": null,
     "path": null,
     "data": [],
     "response": {},
-    "status": 200,
-    "statusText": "OK"
+    "statusText": "OK",
+    "status": 200
 }
 ```
 
@@ -347,89 +373,5 @@ Obuna jadvallari (vaqt oralig'i, davomiyligi va narxi) mavjud bo'lganda:
     "response": {},
     "status": 200,
     "statusText": "OK"
-}
-```
-
----
-
-## 6. Filial tariflarini / obunalarini olish (Get Branch Subscriptions - v2)
-
-Filialga tegishli barcha tariflar (obunalar) ro'yxatini yangilangan v2 formati bo'yicha (jins turi, hafta kunlari, haftalik tashriflar soni va tashrif vaqti imkoniyatlari bilan birga) olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
-
-- **URL:** `/mobile/v2/get/branche_subscriptions`
-- **Method:** `GET`
-- **Headers:** 
-  - `Authorization: Bearer <token>`
-  - `Content-Type: application/json`
-
-### So'rov (Request Body)
-
-| Parametr | Turi | Majburiymi? | Izoh |
-| :--- | :--- | :---: | :--- |
-| `branch_id` | `string` (UUID) | Ha | Tariflari olinayotgan filialning identifikatori |
-
-**Request namunasi (cURL):**
-```bash
-curl --location --request GET 'https://zal360.uz/endpoint/api/mobile/v2/get/branche_subscriptions' --header 'Authorization: Bearer eyJra...' --header 'Content-Type: application/json' --data '{
-  "branch_id": "7a5c35dd-98cc-41cf-a34f-db17cfa6190f"
-}'
-```
-
----
-
-### Javoblar (Responses)
-
-#### 1. Muvaffaqiyatli javob (200 OK)
-Filial tariflari mavjud bo'lganda (v2 formati):
-
-```json
-{
-    "error": null,
-    "message": null,
-    "timestamp": "2026-08-25T03:25:49.537+00:00",
-    "code": null,
-    "path": null,
-    "data": [
-        {
-            "id": "f7785b0a-92cf-4516-bed6-174a19d30cea",
-            "name": "new1",
-            "start_time": "00:00:00",
-            "end_time": "00:00:00",
-            "service_type": "Фитнес",
-            "gender_type": "Умумий",
-            "week_days": "Барча кунлар",
-            "weekly_visits": 0,
-            "visit_can": "исталган пайт"
-        },
-        {
-            "id": "e85baaff-010b-4def-b132-7aa089d4b4a1",
-            "name": "new",
-            "start_time": "00:00:00",
-            "end_time": "00:00:00",
-            "service_type": "Фитнес",
-            "gender_type": "Умумий",
-            "week_days": "Душанба, Чоршанба, Жума",
-            "weekly_visits": 4,
-            "visit_can": "исталган пайт"
-        }
-    ],
-    "response": {},
-    "statusText": "OK",
-    "status": 200
-}
-```
-
-#### 2. Bo'sh javob (Tariflar topilmasa - 200 OK)
-```json
-{
-    "error": null,
-    "message": null,
-    "timestamp": "2026-08-25T03:25:49.537+00:00",
-    "code": null,
-    "path": null,
-    "data": [],
-    "response": {},
-    "statusText": "OK",
-    "status": 200
 }
 ```
