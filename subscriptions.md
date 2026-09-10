@@ -184,7 +184,82 @@ Filial tariflari mavjud bo'lganda (v2 formati):
 
 ---
 
-## 3. Tarif tanlab obuna so'rovini yuborish (Create Client Subscription Request)
+## 3. Obuna jadvallarini olish (Get Subscription Schedules)
+
+Tanlangan tarifga (obunaga) tegishli mashg'ulot kunlari va vaqt jadvallari ro'yxatini olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
+
+- **URL:** `/mobile/v1/get/subscription_schedules`
+- **Method:** `GET`
+- **Headers:** 
+  - `Authorization: Bearer <token>`
+
+### So'rov (Query Parameters)
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `subscription_id` | `string` (UUID) | Ha | Jadvallari olinayotgan obuna (tarif) identifikatori |
+
+**Request namunasi (cURL):**
+```bash
+curl --location 'https://zal360.uz/endpoint/api/mobile/v1/get/subscription_schedules?subscription_id=07e61722-bff1-49dd-88d9-9d102791088e' --header 'Authorization: Bearer eyJra...'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### 1. Muvaffaqiyatli javob (200 OK)
+Obuna jadvallari (vaqt oralig'i, davomiyligi va narxi) mavjud bo'lganda:
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-25T03:23:24.258+00:00",
+    "code": null,
+    "path": null,
+    "data": [
+        {
+            "id": 6,
+            "start_time": "07:00:00",
+            "end_time": "10:00:00",
+            "duration_type": 1,
+            "duration_time": "02:00:00",
+            "price": 1500000.00
+        },
+        {
+            "id": 7,
+            "start_time": "10:00:00",
+            "end_time": "16:00:00",
+            "duration_type": 1,
+            "duration_time": "02:00:00",
+            "price": 1300000.00
+        }
+    ],
+    "response": {},
+    "statusText": "OK",
+    "status": 200
+}
+```
+
+#### 2. Bo'sh javob (Jadvallar mavjud bo'lmasa - 200 OK)
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-08-25T03:24:49.000+00:00",
+    "code": null,
+    "path": null,
+    "data": [],
+    "response": {},
+    "status": 200,
+    "statusText": "OK"
+}
+```
+
+---
+
+## 4. Tarif tanlab obuna so'rovini yuborish (Create Client Subscription Request)
 
 Mijoz tanlagan sport zali filiali, tarifi (obunasi), jadvali, boshlanish sanasi va vaqti bo'yicha obuna so'rovini yaratish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
 
@@ -250,7 +325,7 @@ Obuna so'rovi muvaffaqiyatli yaratilganda yangi yaratilgan yozuvning `id` si (`i
 
 ---
 
-## 4. Mijozning obunalari va arizalari ro'yxatini olish (Get Client Subscriptions)
+## 5. Mijozning obunalari va arizalari ro'yxatini olish (Get Client Subscriptions)
 
 Foydalanuvchi/mijozning barcha yuborgan obuna so'rovlari, arizalari va obunalari holatini (tashkilot, filial, tarif nomi va arizaning joriy statusi) olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
 
@@ -303,81 +378,6 @@ Foydalanuvchining obunalari/arizalari ro'yxati mavjud bo'lganda:
     "error": null,
     "message": null,
     "timestamp": "2026-08-19T07:43:29.411+00:00",
-    "code": null,
-    "path": null,
-    "data": [],
-    "response": {},
-    "status": 200,
-    "statusText": "OK"
-}
-```
-
----
-
-## 5. Obuna jadvallarini olish (Get Subscription Schedules)
-
-Tanlangan tarifga (obunaga) tegishli mashg'ulot kunlari va vaqt jadvallari ro'yxatini olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
-
-- **URL:** `/mobile/v1/get/subscription_schedules`
-- **Method:** `GET`
-- **Headers:** 
-  - `Authorization: Bearer <token>`
-
-### So'rov (Query Parameters)
-
-| Parametr | Turi | Majburiymi? | Izoh |
-| :--- | :--- | :---: | :--- |
-| `subscription_id` | `string` (UUID) | Ha | Jadvallari olinayotgan obuna (tarif) identifikatori |
-
-**Request namunasi (cURL):**
-```bash
-curl --location 'https://zal360.uz/endpoint/api/mobile/v1/get/subscription_schedules?subscription_id=07e61722-bff1-49dd-88d9-9d102791088e' --header 'Authorization: Bearer eyJra...'
-```
-
----
-
-### Javoblar (Responses)
-
-#### 1. Muvaffaqiyatli javob (200 OK)
-Obuna jadvallari (vaqt oralig'i, davomiyligi va narxi) mavjud bo'lganda:
-
-```json
-{
-    "error": null,
-    "message": null,
-    "timestamp": "2026-08-25T03:23:24.258+00:00",
-    "code": null,
-    "path": null,
-    "data": [
-        {
-            "id": 6,
-            "start_time": "07:00:00",
-            "end_time": "10:00:00",
-            "duration_type": 1,
-            "duration_time": "02:00:00",
-            "price": 1500000.00
-        },
-        {
-            "id": 7,
-            "start_time": "10:00:00",
-            "end_time": "16:00:00",
-            "duration_type": 1,
-            "duration_time": "02:00:00",
-            "price": 1300000.00
-        }
-    ],
-    "response": {},
-    "statusText": "OK",
-    "status": 200
-}
-```
-
-#### 2. Bo'sh javob (Jadvallar mavjud bo'lmasa - 200 OK)
-```json
-{
-    "error": null,
-    "message": null,
-    "timestamp": "2026-08-25T03:24:49.000+00:00",
     "code": null,
     "path": null,
     "data": [],
