@@ -40,21 +40,21 @@ Filiallar ro'yxati mavjud bo'lganda quyidagi formatda to'liq ma'lumotlar massivi
     "path": null,
     "data": [
         {
-            "branch_id": "7a5c35dd-98cc-41cf-a34f-db17cfa6190f",
-            "branch_name": "bektemir Bulls",
-            "org_name": "Azizbek's GYM",
-            "org_id": "9148a242-7de9-4ac2-9d2f-9427aed3742c",
-            "address": "qaysidir uyda",
-            "address_additionally": "",
-            "coordinates": "41.246603, 69.379925",
+            "branch_id": "019d5f91-f059-4447-a610-10329e1d030e",
+            "branch_name": "ATLET",
+            "org_name": "BOOK TRADE KO MCHJ",
+            "org_id": "1568b982-76f9-44b4-badc-fd5cc1af0ed7",
+            "address": "Bodomzor",
+            "address_additionally": "masjid oldida",
+            "coordinates": "41.279238, 69.359093",
             "region": "Тошкент ш.",
-            "district": "Бектемир т.",
+            "district": "Яшнобод т.",
             "btime": "07:00:00",
             "etime": "23:00:00",
             "type": "Эркак",
             "capacity": 100,
-            "directions": "Футбол,Бокс",
-            "location": null
+            "directions": "Фитнес,Бокс",
+            "facilities": "парковка,автотураргоҳ"
         }
     ],
     "response": {},
@@ -62,6 +62,26 @@ Filiallar ro'yxati mavjud bo'lganda quyidagi formatda to'liq ma'lumotlar massivi
     "statusText": "OK"
 }
 ```
+
+**Javob maydonlari (Response Data Fields):**
+
+| Maydon | Turi | Izoh |
+| :--- | :--- | :--- |
+| `branch_id` | `string` (UUID) | Filial identifikatori |
+| `branch_name` | `string` | Filial (zal) nomi |
+| `org_name` | `string` | Tashkilot nomi |
+| `org_id` | `string` (UUID) | Tashkilot identifikatori |
+| `address` | `string` | Filial manzili |
+| `address_additionally` | `string` | Qo'shimcha mo'ljal / manzil izohi |
+| `coordinates` | `string` | Xaritadagi koordinatalar (kenglik, uzunlik) |
+| `region` | `string` | Viloyat / shahar nomi |
+| `district` | `string` | Tuman nomi |
+| `btime` | `string` (Time) | Ish boshlanish vaqti (`HH:mm:ss`) |
+| `etime` | `string` (Time) | Ish tugash vaqti (`HH:mm:ss`) |
+| `type` | `string` | Zaldan foydalanuvchilar toifasi (`Эркак`, `Аёл`, `Умумий`) |
+| `capacity` | `integer` | Sig'imi (bir vaqtdagi odamlar soni) |
+| `directions` | `string` | Mavjud sport yo'nalishlari (vergul bilan ajratilgan) |
+| `facilities` | `string` | Qulayliklar (masalan: `парковка,автотураргоҳ`, `душ`, `сауна`) |
 
 #### 2. Bo'sh javob (Filiallar mavjud bo'lmasa - 200 OK)
 ```json
