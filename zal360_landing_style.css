@@ -1,0 +1,36 @@
+/* Google Fonts: Plus Jakarta Sans */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap');
+
+.zal360-landing-white {
+  background-color: #F8FAFC;
+  color: #334155;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+.zal360-landing-white ::selection {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.grid-bg-pattern {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(226, 232, 240, 0.6) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(226, 232, 240, 0.6) 1px, transparent 1px);
+}
+
+@keyframes pulseSoft {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.08); }
+}
+
+.animate-glow-pulse {
+  animation: pulseSoft 7s ease-in-out infinite;
+}
+
+.text-gradient-accent {
+  background: linear-gradient(135deg, #059669 0%, #0284C7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
