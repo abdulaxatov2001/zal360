@@ -121,9 +121,98 @@ Foydalanuvchining tashrif buyurish holati tekshirilganda qaytadigan javob:
 
 ---
 
-### Ishlatilish Ketma-ketligi (Workflow):
-1. Foydalanuvchi ilovada yoki zalga kelganda uning tashrif buyura olishi tekshiriladi (`/mobile/v1/get/check/can_visit`).
-2. Agar `can_visit: true` bo'lsa, foydalanuvchi zalning QR kodini skanerlaydi.
-3. Ilova orqali identifikatsiya uchun suratga olinadi.
-4. Fotosurat ushbu API (`/file/api/v1/public/upload/category/visits`) orqali serverga yuklanadi va javobdan `id` olinadi.
-5. Olingan fayl `id`si va filialning `branch_id`si bilan birgalikda mijoz tashrifi (client visit / check-in) so'rovi amalga oshiriladi.
+## 3. Davomatni jo'natish / Tashrifni qayd etish (Submit Visit / Check-in)
+
+Foydalanuvchining sport zaliga tashrifini (davomatini) tizimda tasdiqlash va ro'yxatga olish (check-in) uchun ishlatiladi. Ushbu so'rov orqali tashrif sanasi (`visit_date`), tashrif paytidagi fotosurat IDsi (`visit_photo_id`) hamda mijozning asosiy fotosurati IDsi (`main_photo_id`) yuboriladi.
+
+- **URL:** `/mobile/v1/post/visits`
+- **To'liq URL:** `https://zal360.uz/endpoint/api/mobile/v1/post/visits`
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+- **Headers:**
+  - `Authorization: Bearer <access_token>`
+  - `Content-Type: application/json`
+
+---
+
+### So'rov (Request Body — JSON)
+
+```json
+{
+    "visit_date": "2026-09-11",
+    "visit_photo_id": "8a8181963e9c4f102dfe2228",
+    "main_photo_id": "8a8181963e9c4f102dfe2228"
+}
+```
+
+#### So'rov parametrlarining tavsifi:
+
+| Parametr | Turi | Majburiymi? | Izoh |
+| :--- | :--- | :---: | :--- |
+| `visit_date` | `string` | Ha | Tashrif sanasi (`YYYY-MM-DD` formatida, masalan: `"2026-09-11"`) |
+| `visit_photo_id` | `string` | Ha | Tashrif jarayonida olingan fotosurat IDsi (1-bo'limdagi `/file/api/v1/public/upload/category/visits` orqali yuklangan rasm `id`si) |
+| `main_photo_id` | `string` | Ha | Foydalanuvchining profil/taqqoslash uchun asosiy fotosurati IDsi |
+
+**Request namunasi (cURL):**
+```bash
+curl --location 'https://zal360.uz/endpoint/api/mobile/v1/post/visits' \
+--header 'Authorization: Bearer eyJraWQiOiIzNTdiNDUx...' \
+--header 'Content-Type: application/json' \
+--data '{
+    "visit_date": "2026-09-11",
+    "visit_photo_id": "8a8181963e9c4f102dfe2228",
+    "main_photo_id": "8a8181963e9c4f102dfe2228"
+}'
+```
+
+---
+
+### Javoblar (Responses)
+
+#### 1. Muvaffaqiyatli javob (200 OK)
+
+Tashrif (davomat) muvaffaqiyatli qayd etilganda:
+
+```json
+{
+    "error": null,
+    "message": null,
+    "timestamp": "2026-09-11T09:29:21.789+00:00",
+    "code": null,
+    "path": null,
+    "data": {
+        "check_in": "2026-09-10",
+        "id": "85b537c8-45ef-462c-88f3-5325423580c2"
+    },
+    "response": {},
+    "statusText": "OK",
+    "status": 200
+}
+```
+
+#### Javob parametrlarining tavsifi (`data` obyekti):
+
+| Maydon | Turi | Tavsifi |
+| :--- | :--- | :--- |
+| `id` | `string` (UUID) | Qayd etilgan tashrif (check-in) yozuvining tizimdagi noyob identifikatori |
+| `check_in` | `string` | Tizimda qayd etilgan tashrif sanasi (`YYYY-MM-DD` formatida) |
+
+---
+
+### Ishlatilish Ketma-ketligi (To'liq Check-in Workflow):
+
+1. **Oldindan tekshirish (1-qadam):**
+   Foydalanuvchi zalga kelganda uning tashrif buyura olish huquqi tekshiriladi:
+   `GET https://zal360.uz/endpoint/api/mobile/v1/get/check/can_visit`
+   Agar `can_visit: true` qaytsa, keyingi bosqichga o'tiladi.
+
+2. **Suratga olish va rasm yuklash (2-qadam):**
+   Foydalanuvchi selfi / tashrif fotosuratini oladi va ushbu rasm serverga yuklanadi:
+   `POST https://zal360.uz/file/api/v1/public/upload/category/visits`
+   Muvaffaqiyatli javobdan rasmning noyob identifikatori `id` olinadi (bu `visit_photo_id` bo'ladi).
+
+3. **Davomatni jo'natish / Tashrifni ro'yxatdan o'tkazish (3-qadam):**
+   Olingan `visit_photo_id`, foydalanuvchining asosiy rasm IDsi (`main_photo_id`) va joriy sana (`visit_date`) bilan davomat yuboriladi:
+   `POST https://zal360.uz/endpoint/api/mobile/v1/post/visits`
+   Serverdan `id` (check-in UUID) va `check_in` sanasi qaytib, mijoz zalga kirgan deb belgilanadi.
+

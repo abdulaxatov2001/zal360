@@ -206,8 +206,8 @@ Filial tariflari mavjud bo'lganda (v2 formati):
 
 ## 3. Obuna jadvallarini olish (Get Subscription Schedules)
 
-Tanlangan tarifga (obunaga) tegishli mashg'ulot kunlari va vaqt jadvallari ro'yxatini olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi.
-
+Tanlangan tarifga (obunaga) tegishli mashg'ulot kunlari va vaqt jadvallari ro'yxatini olish uchun ishlatiladi. Ushbu API avtorizatsiya talab qiladi. 
+duration_type = 1 bolganda mashgulot vaqti  cheklangan boladi . duration_type = 0 bolsa cheklanmaganb boladi.
 - **URL:** `/mobile/v1/get/subscription_schedules`
 - **Method:** `GET`
 - **Headers:** 
